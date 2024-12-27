@@ -1,18 +1,22 @@
 import { motion } from "motion/react"
-import { useState } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import LoginForm from "./loginForm/LoginForm";
 import './Login.css'
 import { easeInOut } from "motion"
+import { LogIn } from "../services/userService";
+
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [usingKey, setUsingkey] = useState(false);
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: FormEvent) => {
         // hit api here to verify log in. however we need to check whether the user already has a JWT when they get to this page
         // AND if they will be using a password OR one time use key to determine which endpoint to consume
         event.preventDefault()
-        console.log({username, password})
+        const jwt = await LogIn({username, password})
+        console.log(jwt.jwt)
+        // if valid we cache jwt here?
     }
 
     const handleUsernameInputChange = (username: string) => {
@@ -23,10 +27,9 @@ function Login() {
         setPassword(password)
     }
     
-    const handleUsingKeyChange = () => {
-        setUsingkey(!usingKey)
+    const handleUsingKeyChange = ({target: {checked}}: ChangeEvent<HTMLInputElement>) => {
+        setUsingkey(checked)
     }
-
     return <div className="page">
         <motion.div 
         id="welcome"
@@ -36,7 +39,9 @@ function Login() {
             Chattr
         </motion.div>
 
-        <LoginForm onSubmit={handleSubmit} onUsernameInputChange={handleUsernameInputChange} onPasswordInputChange={handlePasswordInputChange}/>
+        <LoginForm onSubmit={handleSubmit} onUsernameInputChange={handleUsernameInputChange}
+         onPasswordInputChange={handlePasswordInputChange} onButtonPressKeyChange={handleUsingKeyChange}
+         usingKey={usingKey}/>
        
     </div>
 }
