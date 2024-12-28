@@ -8,29 +8,37 @@ import { LogIn } from "../services/userService";
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [usingKey, setUsingkey] = useState(false);
+    const [isSubmitting, setSubmitting] = useState(false);
 
     const handleSubmit = async (event: FormEvent) => {
+        event.preventDefault()
         // hit api here to verify log in. however we need to check whether the user already has a JWT when they get to this page
         // AND if they will be using a password OR one time use key to determine which endpoint to consume
-        event.preventDefault()
-        const jwt = await LogIn({username, password})
-        console.log(jwt.jwt)
+        setSubmitting(true)
+        // here we probably need to somehow switch to a loading icon right?
+        try {
+            const jwt = await LogIn({username, password})
+            console.log(jwt.Jwt)
+        } catch (err) {
+            setSubmitting(false);
+        } 
+        
         // if valid we cache jwt here?
     }
 
-    const handleUsernameInputChange = (username: string) => {
+    const handleUsernameInputChange = (username: string): void => {
         setUsername(username)
     }
 
-    const handlePasswordInputChange = (password: string) => {
+    const handlePasswordInputChange = (password: string): void => {
         setPassword(password)
     }
     
-    const handleUsingKeyChange = ({target: {checked}}: ChangeEvent<HTMLInputElement>) => {
-        setUsingkey(checked)
+
+    if (isSubmitting) {
+        return <div>hello me so skibidi</div>
     }
-    return <div className="page">
+    return <div className="page" id="loginpage">
         <motion.div 
         id="welcome"
         initial={{opacity: 0}} 
@@ -40,8 +48,7 @@ function Login() {
         </motion.div>
 
         <LoginForm onSubmit={handleSubmit} onUsernameInputChange={handleUsernameInputChange}
-         onPasswordInputChange={handlePasswordInputChange} onButtonPressKeyChange={handleUsingKeyChange}
-         usingKey={usingKey}/>
+         onPasswordInputChange={handlePasswordInputChange}/>
        
     </div>
 }

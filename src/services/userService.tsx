@@ -15,7 +15,6 @@ export async function LogIn({username, password}:LoginForm) {
         const responseJson = await response.json()
         return responseJson
     } else {
-        const error = await response.text()
-        console.error('error while trying to login', error)
+        throw new Error('invalid');
     }
 }
