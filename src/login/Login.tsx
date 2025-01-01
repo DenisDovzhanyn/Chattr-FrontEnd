@@ -1,26 +1,29 @@
 import { motion } from "motion/react"
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import LoginForm from "./loginForm/LoginForm";
 import './Login.css'
 import { easeInOut } from "motion"
 import { LogIn } from "../services/userService";
-
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store/store";
+import { setIsLoading } from "../store/isLoadingSlice";
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [isSubmitting, setSubmitting] = useState(false);
+    const isLoading = useSelector( (state: RootState) => state.isLoading.value)
+    const dispatch = useDispatch()
 
     const handleSubmit = async (event: FormEvent) => {
         event.preventDefault()
         // hit api here to verify log in. however we need to check whether the user already has a JWT when they get to this page
         // AND if they will be using a password OR one time use key to determine which endpoint to consume
-        setSubmitting(true)
         // here we probably need to somehow switch to a loading icon right?
         try {
+            dispatch(setIsLoading(true))
             const jwt = await LogIn({username, password})
             console.log(jwt.Jwt)
         } catch (err) {
-            setSubmitting(false);
+            dispatch(setIsLoading(false))
         } 
         
         // if valid we cache jwt here?
@@ -35,7 +38,7 @@ function Login() {
     }
     
 
-    if (isSubmitting) {
+    if (isLoading) {
         return <div>hello me so skibidi</div>
     }
     return <div className="page" id="loginpage">

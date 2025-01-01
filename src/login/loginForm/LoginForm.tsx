@@ -7,7 +7,7 @@ type LoginForm = {
     onUsernameInputChange: (username: string) => void
     onPasswordInputChange: (password: string) => void
 }
-function LoginForm({onSubmit, onUsernameInputChange, onPasswordInputChange, }: LoginForm ) {
+function LoginForm({onSubmit, onUsernameInputChange, onPasswordInputChange }: LoginForm ) {
     return <motion.div id="loginForm">
         <form onSubmit={onSubmit} id="form">
             <input type="text" name="username" placeholder="Username" onChange={(e) => onUsernameInputChange(e.target.value)} required></input>
