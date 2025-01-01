@@ -1,4 +1,4 @@
-type LoginForm = {
+export type LoginForm = {
     username: string,
     password: string
 }
@@ -15,6 +15,6 @@ export async function LogIn({username, password}:LoginForm) {
         const responseJson = await response.json()
         return responseJson
     } else {
-        throw new Error('invalid');
+        throw new Error('response.status');
     }
 }
