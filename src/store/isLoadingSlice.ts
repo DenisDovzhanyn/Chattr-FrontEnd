@@ -1,11 +1,12 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {LogIn, LoginForm} from "../services/userService";
+import { setUser } from "./userSlice";
 
-interface isLoadingState {
+interface IsLoadingState {
     value: boolean
 }
 
-const initialState: isLoadingState = {
+const initialState: IsLoadingState = {
     value: false
 }
 export const isLoadingSlice = createSlice({
@@ -19,12 +20,12 @@ export const isLoadingSlice = createSlice({
                 state.value = true;
             }
         ).addCase(logInAsync.fulfilled,
-            (state, action /* jwt */) => {
+            (state) => {
                 state.value = false;
-                // call a diff function to store the jwt?
             }
         ).addCase(logInAsync.rejected,
-            (state) => {
+            (state, action) => {
+                console.log(action.error)
                 state.value = false;
 
             }
@@ -34,8 +35,9 @@ export const isLoadingSlice = createSlice({
 
 export const logInAsync = createAsyncThunk(
     "isLoading/logInAsync",
-    async ({username, password}: LoginForm) => {
-        const jwt = await LogIn({username, password})
+    async (form: LoginForm, {dispatch}) => {
+        const jwt = await LogIn(form)
+        dispatch(setUser(jwt.Jwt));
         return jwt
     }
 )

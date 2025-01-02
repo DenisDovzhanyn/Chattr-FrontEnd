@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import isLoadingReducer from "./isLoadingSlice";
+import userReducer from './userSlice';
 
 export const store =  configureStore({
     reducer: {
-        isLoading: isLoadingReducer
+        isLoading: isLoadingReducer,
+        user: userReducer
     }
 })
 
