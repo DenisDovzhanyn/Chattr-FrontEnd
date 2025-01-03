@@ -35,7 +35,12 @@ function Login() {
         return <div>hello me so skibidi</div>
     }
     return <div className="page" id="loginpage">
-     
+        <div className="video-background">
+            <video autoPlay loop muted playsInline>
+            <source src="/loginBackground.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+            </video>
+        </div>
         <LoginForm onSubmit={handleSubmit} onUsernameInputChange={handleUsernameInputChange}
          onPasswordInputChange={handlePasswordInputChange}/>
        

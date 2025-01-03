@@ -2,6 +2,7 @@
     font-size: 75px;
     size: 1000px;
     text-align: center;
+    font-family: 'Barlow Condensed', Arial, sans-serif;
 }
 
 #loginForm {
@@ -14,11 +15,33 @@
     border-style: solid;
     border-width: 1px;
     border-color: #515151;
-
+    gap: 10px;
+    padding: 10px 0px;
+    background-color: #1F1F1F;
 }
 
 #loginpage {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.video-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; 
+    overflow: hidden;
+}
+
+.video-background video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 100%;
+    min-height: 100%;
+    object-fit: cover; 
 }

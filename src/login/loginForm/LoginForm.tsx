@@ -24,7 +24,7 @@ function LoginForm({onSubmit, onUsernameInputChange, onPasswordInputChange }: Lo
             <input className="input" type={showPassword ? "text" : "password"} name="password" placeholder="Password" onChange={(e) => onPasswordInputChange(e.target.value)} required />
             <label>
                 <input type="checkbox" checked={showPassword} onChange={() => setShowPassword(!showPassword)} />
-                show Password?
+                Show password?
             </label>
             
             <button type="submit">Log in</button>
@@ -34,6 +34,8 @@ function LoginForm({onSubmit, onUsernameInputChange, onPasswordInputChange }: Lo
             OR
             <div className="line" />
         </div>
+
+        <a>Forgot password?</a>
     </motion.div>
 }
 
