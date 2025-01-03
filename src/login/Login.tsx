@@ -5,11 +5,12 @@ import './Login.css'
 import { easeInOut } from "motion"
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
-import { logInAsync } from "../store/isLoadingSlice";
+import { logInAsync } from "../store/userSlice";
+
 function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const isLoading = useSelector( (state: RootState) => state.isLoading.value)
+    const {isLoading} = useSelector( (state: RootState) => state.user)
     const dispatch = useDispatch<AppDispatch>()
 
     const handleSubmit = async (event: FormEvent) => {
@@ -34,14 +35,7 @@ function Login() {
         return <div>hello me so skibidi</div>
     }
     return <div className="page" id="loginpage">
-        <motion.div 
-        id="welcome"
-        initial={{opacity: 0}} 
-        animate={{opacity: [0.7, 1, 0.7]}}
-        transition={{repeat: Infinity, duration: 2, ease: easeInOut}}>
-            Chattr
-        </motion.div>
-
+     
         <LoginForm onSubmit={handleSubmit} onUsernameInputChange={handleUsernameInputChange}
          onPasswordInputChange={handlePasswordInputChange}/>
        
