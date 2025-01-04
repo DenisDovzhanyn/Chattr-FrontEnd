@@ -1,8 +1,11 @@
 #welcome {
     font-size: 75px;
-    size: 1000px;
     text-align: center;
     font-family: 'Barlow Condensed', Arial, sans-serif;
+    font-weight: 300;
+    display: flex;
+    align-items: end;
+    width: 200px;
 }
 
 #loginForm {
@@ -12,18 +15,39 @@
     justify-content: center;
     align-items: center;
     max-width: 400px;
+    width: 350px;
     border-style: solid;
     border-width: 1px;
     border-color: #515151;
     gap: 10px;
-    padding: 10px 0px;
-    background-color: #1F1F1F;
+    padding: 20px 0px 15px 0px;
+    background-color: #0a192d;;
 }
 
 #loginpage {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    gap: 10px;
+}
+
+#registercontainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 400px;
+    width: 350px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: #515151;
+    height: 50px;
+    color: white;
+    background-color: #0a192d;
+}
+
+#signup {
+    color: #b0b4fd;
 }
 
 .video-background {
@@ -45,3 +69,32 @@
     min-height: 100%;
     object-fit: cover; 
 }
+
+
+
+#form {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    padding: 20px 50px;
+    border-radius: 20px;
+}
+
+.showpassword {
+    cursor: pointer;
+}
+
+.input {
+    width: 200px;
+    height: 25px;
+    border-radius: 5px;
+    border-style: none;
+}
+
+#forgotpassword {
+    text-decoration: underline;
+}
+

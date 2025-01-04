@@ -8,8 +8,8 @@
 }
 
 .logo {
-  height: 6em;
-  padding: 1.5em;
+  height: 4em;
+  width: 4em;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -41,4 +41,13 @@
 
 .read-the-docs {
   color: #888;
+}
+
+a {
+  cursor: pointer;
+}
+
+
+button {
+  cursor: pointer; 
 }

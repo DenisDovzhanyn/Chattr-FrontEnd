@@ -25,6 +25,7 @@ html, body {
 .page {
   height: 100%;
   width: 100%;
+
 }
 
 a {
@@ -63,16 +64,27 @@ button {
   cursor: pointer;
   transition: background-color 1s;
   width: 200px;
+  background-color: #a1a1eb;
 }
 button:hover {
-  
-  background-color: yellow;
+  background-color: #d3d3ff;
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+button:disabled {
+  background-color: #525273;
+}
+
+button:hover:disabled {
+  background-color: #525273;
+}
+
+.input:focus-visible {
+  outline: none;
+}
 /*
 @media (prefers-color-scheme: light) {
   :root {
