@@ -8,8 +8,6 @@
 }
 
 .logo {
-  height: 4em;
-  width: 4em;
   will-change: filter;
   transition: filter 300ms;
 }

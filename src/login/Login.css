@@ -1,12 +1,14 @@
-#welcome {
-    font-size: 75px;
-    text-align: center;
-    font-family: 'Barlow Condensed', Arial, sans-serif;
-    font-weight: 300;
-    display: flex;
-    align-items: end;
-    width: 200px;
+#logotext {
+    width: 175px;
+    height: 50px;
 }
+
+#logophoto {
+    height: 3.1em; 
+    width: 3em;
+}
+
+
 
 #loginForm {
     display: flex;
@@ -48,6 +50,14 @@
 
 #signup {
     color: #b0b4fd;
+}
+
+
+
+.logo {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
 }
 
 .video-background {

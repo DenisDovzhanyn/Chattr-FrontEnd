@@ -42,17 +42,21 @@ function Login() {
         <div className="video-background">
             <video autoPlay loop muted playsInline>
             <source src="/loginBackground.mp4" type="video/mp4" />
+            Your browser does not support the video tag
             </video>
         </div>
         
         <motion.div id="loginForm">
-            <img src="/chattrlogo.png" className="logo"/>
-            <motion.img 
-            src="/chattrlogotext.png"
-            id="welcome"
-            initial={{opacity: 0}} 
-            animate={{opacity: [0.7, 1, 0.7]}}
-            transition={{repeat: Infinity, duration: 2, ease: easeInOut}} />
+            <div className="logo">
+                <img src="/chattrlogo.png" id="logophoto"/>
+                <motion.img 
+                    src="/chattrlogotext.png"
+                    id="logotext"
+                    initial={{opacity: 0}} 
+                    animate={{opacity: [0.7, 1, 0.7]}}
+                    transition={{repeat: Infinity, duration: 2, ease: easeInOut}} />
+            </div>
+            
                 
             <form onSubmit={handleSubmit} id="form">
                 <input className="input" type="text" name="username" placeholder="Username" onChange={(e) => handleUsernameInputChange(e.target.value)} required />
@@ -62,7 +66,9 @@ function Login() {
                     Show password?
                 </label>
                 
-                <button type="submit" disabled={!(username.trim() && password.trim())}>Log in</button>
+                <motion.button  
+                whileTap={!(username.trim() && password.trim()) ? undefined : { scale: 0.85 }}
+                type="submit" disabled={!(username.trim() && password.trim())}>Log in</motion.button>
             </form>
             <a id="forgotpassword">Forgot password?</a>
         </motion.div>

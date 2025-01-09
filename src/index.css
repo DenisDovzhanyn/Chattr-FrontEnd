@@ -71,15 +71,15 @@ button:hover {
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: none
 }
 
 button:disabled {
-  background-color: #525273;
+  background-color: #8a8a9b;
 }
 
 button:hover:disabled {
-  background-color: #525273;
+  background-color: #8a8a9b;
 }
 
 .input:focus-visible {
