@@ -3,8 +3,8 @@ import { useState, FormEvent } from "react";
 import "./Login.css";
 import { easeInOut } from "motion";
 import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "../store/store";
-import { logInAsync } from "../store/userSlice";
+import { AppDispatch, RootState } from "../../store/store";
+import { logInAsync } from "../../store/userSlice";
 
 
 function Login() {
