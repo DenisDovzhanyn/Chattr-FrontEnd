@@ -64,7 +64,12 @@ button {
   cursor: pointer;
   transition: background-color 1s;
   width: 200px;
+  max-width: 200px;
+  max-height: 43px;
   background-color: #a1a1eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 button:hover {
   background-color: #d3d3ff;
