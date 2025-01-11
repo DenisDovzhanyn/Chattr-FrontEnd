@@ -3,18 +3,30 @@ export type LoginForm = {
     password: string
 }
 export async function LogIn({username, password}:LoginForm) {
-    const response = await fetch(`${import.meta.env.VITE_BASE_API}/api/login`,
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-        }
-    )
-    if (response.ok) {
+    let errMessage = 'Internal server error'
+    try {
+        const response = await fetch(`${import.meta.env.VITE_BASE_API}/api/login`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' },
+                body: JSON.stringify({ username, password })
+            }
+        )
+
+        if (response.ok) {
+            const responseJson = await response.json()
+            return responseJson
+        } 
+
         const responseJson = await response.json()
-        return responseJson
-    } else {
-        throw new Error('response.status');
+        errMessage = responseJson.error
+    
+        
+    } catch(err) {
+        
     }
+
+    throw new Error(errMessage)
+    
 }

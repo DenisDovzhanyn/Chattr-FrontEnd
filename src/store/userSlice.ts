@@ -7,6 +7,7 @@ interface UserState {
     userId: number | null
     jwt: string | null
     isLoading: boolean
+    error: string 
 }
 interface JwtClaim {
     user_id: number | null
@@ -18,7 +19,8 @@ const decodedToken = token ? jwtDecode<JwtClaim>(token) : null
 const initialState: UserState = {
     userId: decodedToken?.user_id || null,
     jwt: token,
-    isLoading: false
+    isLoading: false,
+    error: ''
 }
 
 export const logInAsync = createAsyncThunk(
@@ -36,6 +38,7 @@ export const userSlice = createSlice( {
                 .addCase(logInAsync.pending, 
                     (state) => {
                         state.isLoading = true;
+                        state.error = ''
                     }
                 ).addCase(logInAsync.fulfilled,
                     (state, action) => {
@@ -46,8 +49,8 @@ export const userSlice = createSlice( {
                     }
                 ).addCase(logInAsync.rejected,
                     (state, action) => {
-                        console.log(action.error)
-                        state.isLoading = false;
+                        state.error = action.error.message || ''
+                        state.isLoading = false
                     }
                 )
         }

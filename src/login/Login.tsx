@@ -5,13 +5,14 @@ import { easeInOut } from "motion";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../store/store";
 import { logInAsync } from "../store/userSlice";
-import { ThreeDots } from "react-loader-spinner";
+
 
 function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
-    const { isLoading } = useSelector((state: RootState) => state.user);
+    
+    const { isLoading, error } = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSubmit = async (event: FormEvent) => {
@@ -119,6 +120,7 @@ function Login() {
                         )}
                     </motion.button>
                 </form>
+                {error.length ? <p id="incorrectlogin">{error}</p> : <></>}
                 <a id="forgotpassword">Forgot password?</a>
             </div>
 
