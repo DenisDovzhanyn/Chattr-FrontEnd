@@ -11,13 +11,13 @@ interface UserState {
 interface JwtClaim {
     user_id: number | null
 }
-// landing page stuff these two lines
+
 const token = localStorage.getItem('jwt')
 const decodedToken = token ? jwtDecode<JwtClaim>(token) : null
 
 const initialState: UserState = {
     userId: decodedToken?.user_id || null,
-    jwt: token || null,
+    jwt: token,
     isLoading: false
 }
 
@@ -39,9 +39,9 @@ export const userSlice = createSlice( {
                     }
                 ).addCase(logInAsync.fulfilled,
                     (state, action) => {
-                        state.jwt = action.payload
-                        state.userId = jwtDecode<JwtClaim>(action.payload).user_id
-                        localStorage.setItem('jwt', action.payload)
+                        state.jwt = action.payload.Jwt
+                        state.userId = jwtDecode<JwtClaim>(action.payload.Jwt).user_id
+                        localStorage.setItem('jwt', action.payload.Jwt)
                         state.isLoading = false;
                     }
                 ).addCase(logInAsync.rejected,

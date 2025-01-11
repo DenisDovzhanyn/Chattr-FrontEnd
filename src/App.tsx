@@ -12,11 +12,12 @@ function App() {
   return (
     <>
       <Routes>
-        <Route path='/login' element={jwt ? <Navigate to ='./homepage' /> : <Login />} />
+        <Route path='/login' element={jwt ? <Navigate to ='/homepage' /> : <Login />} />
+        <Route path='/login/forgotpassword' element={<div>uh oh someone forgot their password</div>} />
         <Route path='/homepage' element={<Privateroute/>}>
           <Route path='/homepage' element={<div>lets go bro ur authenticated W IN CHAT</div>} />
         </Route>
-        <Route path='*' element={<div>ERROR 404: PAGE NOT FOUND</div>} />
+        <Route path='*' element={jwt ? <Navigate to ='/homepage' /> : <Navigate to ='/login' />} />
       </Routes>
     </>
   )
