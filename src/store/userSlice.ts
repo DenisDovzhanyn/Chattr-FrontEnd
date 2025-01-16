@@ -15,16 +15,10 @@ interface JwtClaim {
     token_type: string
 }
 
-let token = localStorage.getItem('access')
-const decodedToken = token ? jwtDecode<JwtClaim>(token) : null
 
-if (decodedToken && decodedToken.exp < Date.now() / 1000) {
-    localStorage.removeItem('access')
-    token = null
-}
 const initialState: UserState = {
-    userId: decodedToken?.user_id || null,
-    access: token,
+    userId: null,
+    access: null,
     isLoading: false,
     error: ''
 }
@@ -38,6 +32,19 @@ export const userSlice = createSlice( {
     name: 'user',
     initialState,
     reducers: {
+        loadSession: (state) => {
+            let token = localStorage.getItem('access')
+            const decodedToken = token ? jwtDecode<JwtClaim>(token) : null
+
+            if (decodedToken && decodedToken.exp < Date.now() / 1000) {
+                localStorage.removeItem('access')
+                token = null
+            }
+
+            state.access = token
+            state.userId = decodedToken?.user_id || null
+
+        }
     },
     extraReducers: (builder) => {
             builder
@@ -63,3 +70,4 @@ export const userSlice = createSlice( {
 })
 
 export default userSlice.reducer
+export const {loadSession} = userSlice.actions

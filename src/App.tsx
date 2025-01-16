@@ -3,11 +3,17 @@ import './App.css'
 import Login from './pages/login/Login'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Privateroute from './privateroute';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadSession } from './store/userSlice';
 import { RootState } from './store/store';
+import { useEffect } from 'react';
 
 function App() {
   const {access} = useSelector((state: RootState) => state.user)
+  const dispatch = useDispatch()
+  useEffect(() => {
+    dispatch(loadSession())
+  }, [])
 
   return (
     <>
