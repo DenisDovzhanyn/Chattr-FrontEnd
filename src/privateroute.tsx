@@ -4,8 +4,8 @@ import { useSelector} from 'react-redux';
 import { RootState } from './store/store';
 
 export default ()  => {
-    const {jwt} = useSelector((state: RootState) => state.user);
+    const {access} = useSelector((state: RootState) => state.user);
 
-    return jwt ? <Outlet/> : <Navigate to='/login' />
+    return access ? <Outlet/> : <Navigate to='/login' />
 }
 
