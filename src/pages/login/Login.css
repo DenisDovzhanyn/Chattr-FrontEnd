@@ -89,14 +89,20 @@
     justify-content: center;
     align-items: center;
     gap: 20px;
-    padding: 20px 50px;
+    padding: 20px 0px;
     border-radius: 20px;
 }
 
-.showpassword {
+#showpassword {
     cursor: pointer;
+    height: 27px;
+    width: 30px;
+    background-color: #294161;
+    border-radius: 0px 5px 5px 0px;
 }
-
+#showpassbutton {
+    all: initial
+}
 .input {
     width: 200px;
     height: 25px;
@@ -116,4 +122,28 @@
 #incorrectlogin {
     margin: 0;
     color: #ff6e6e;
+}
+
+.loginlabel {
+    font-size: small;
+    width: 204px;
+}
+
+.checkboxtext {
+    font-size: medium;
+}
+
+#checkboxcontainer {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+#passwordfield {
+    display: flex;
+}
+
+#passwordinput {
+    width: 200px;
+    border-radius: 5px 0px 0px 5px;
 }

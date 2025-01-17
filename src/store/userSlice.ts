@@ -8,6 +8,7 @@ interface UserState {
     access: string | null
     isLoading: boolean
     error: string 
+    keepLoggedin: boolean
 }
 interface JwtClaim {
     user_id: number | null
@@ -20,7 +21,8 @@ const initialState: UserState = {
     userId: null,
     access: null,
     isLoading: false,
-    error: ''
+    error: '',
+    keepLoggedin: false
 }
 
 export const logInAsync = createAsyncThunk(
@@ -33,18 +35,25 @@ export const userSlice = createSlice( {
     initialState,
     reducers: {
         loadSession: (state) => {
-            let token = localStorage.getItem('access')
+            const TOKEN_KEY = 'access'
+            let token = localStorage.getItem(TOKEN_KEY)
+            if (!token) token = sessionStorage.getItem(TOKEN_KEY)
+
             const decodedToken = token ? jwtDecode<JwtClaim>(token) : null
 
             if (decodedToken && decodedToken.exp < Date.now() / 1000) {
                 localStorage.removeItem('access')
+                sessionStorage.removeItem('access')
                 token = null
             }
 
             state.access = token
             state.userId = decodedToken?.user_id || null
 
-        }
+        },
+        setKeepLoggedIn: (state) => {
+            state.keepLoggedin = !state.keepLoggedin
+        } 
     },
     extraReducers: (builder) => {
             builder
@@ -57,7 +66,10 @@ export const userSlice = createSlice( {
                     (state, action) => {
                         state.access = action.payload.access_token
                         state.userId = jwtDecode<JwtClaim>(action.payload.access_token).user_id
-                        localStorage.setItem('access', action.payload.access_token)
+
+                        if (state.keepLoggedin) localStorage.setItem('access', action.payload.access_token)
+                        else sessionStorage.setItem('access', action.payload.access_token)
+
                         state.isLoading = false;
                     }
                 ).addCase(logInAsync.rejected,
@@ -70,4 +82,4 @@ export const userSlice = createSlice( {
 })
 
 export default userSlice.reducer
-export const {loadSession} = userSlice.actions
+export const {loadSession, setKeepLoggedIn} = userSlice.actions
