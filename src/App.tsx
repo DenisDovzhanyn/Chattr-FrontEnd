@@ -4,15 +4,16 @@ import Login from './pages/login/Login'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Privateroute from './privateroute';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadSession } from './store/userSlice';
-import { RootState } from './store/store';
+import { loadSessionAsync } from './store/userSlice';
+import { AppDispatch, RootState } from './store/store';
 import { useEffect } from 'react';
 
 function App() {
   const {access} = useSelector((state: RootState) => state.user)
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatch>()
+  
   useEffect(() => {
-    dispatch(loadSession())
+    dispatch(loadSessionAsync())
   }, [])
 
   return (
