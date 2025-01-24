@@ -47,35 +47,55 @@ export const loadSessionAsync = createAsyncThunk(
     }
 )
 
+
+
+export const renewAccessAsync = createAsyncThunk(
+    "user/renewAccessAsync",
+    async () => {
+        return (await renewAccess()).access_token
+    }
+)
+
 export const userSlice = createSlice( {
     name: 'user',
     initialState,
     reducers: {
         setKeepLoggedIn: (state) => {
             state.keepLoggedin = !state.keepLoggedin
-        } 
+        },
+        clearUserData: (state) => {
+            state.access = null
+            state.userId = null
+            localStorage.clear()
+            sessionStorage.clear()
+        },
+        setError: (state, action) => {
+            state.error = action.payload
+        }
     },
     extraReducers: (builder) => {
             builder
                 .addCase(logInAsync.pending, (state) => {
-                        state.isLoading = true;
-                        state.error = ''
-                    })
+                    state.isLoading = true;
+                    state.error = ''
+                })
                 .addCase(logInAsync.fulfilled, (state, action) => {
-                        state.access = action.payload.access_token
-                        state.userId = jwtDecode<JwtClaim>(action.payload.access_token).user_id
+                    state.access = action.payload.access_token
+                    state.userId = jwtDecode<JwtClaim>(action.payload.access_token).user_id
 
-                        if (state.keepLoggedin) localStorage.setItem('access', action.payload.access_token)
-                        else sessionStorage.setItem('access', action.payload.access_token)
+                    localStorage.removeItem('access')
+                    sessionStorage.removeItem('access')
+                    if (state.keepLoggedin) localStorage.setItem('access', action.payload.access_token)
+                    else sessionStorage.setItem('access', action.payload.access_token)
 
-                        localStorage.setItem('keepLoggedIn', `${state.keepLoggedin}`)
+                    localStorage.setItem('keepLoggedIn', `${state.keepLoggedin}`)
 
-                        state.isLoading = false;
-                    })
+                    state.isLoading = false;
+                })
                 .addCase(logInAsync.rejected, (state, action) => {
-                        state.error = action.error.message || ''
-                        state.isLoading = false
-                    })
+                    state.error = action.error.message || ''
+                    state.isLoading = false
+                })
                 .addCase(loadSessionAsync.pending, (state) => {
                     state.isLoading = true
                 })
@@ -85,7 +105,8 @@ export const userSlice = createSlice( {
                     state.userId = decodedToken.user_id
                     state.access = token
                     state.isLoading = false
-
+                    localStorage.removeItem('access')
+                    sessionStorage.removeItem('access')
                     const keepLogged = Boolean(localStorage.getItem('keepLoggedIn'))
 
                     if (keepLogged) sessionStorage.setItem('access', token)
@@ -95,10 +116,33 @@ export const userSlice = createSlice( {
                     state.userId = null
                     state.access = null
                     state.isLoading = false
+                    localStorage.removeItem('access')
+                    sessionStorage.removeItem('access')
+                })
+                .addCase(renewAccessAsync.pending, (state) => {
+                    state.isLoading = true;
+                })
+                .addCase(renewAccessAsync.fulfilled, (state, action) => {
+                    let token = action.payload
+                    state.access = token
+                    state.isLoading = false
+                    localStorage.removeItem('access')
+                    sessionStorage.removeItem('access')
+
+                    const keepLogged = Boolean(localStorage.getItem('keepLoggedIn'))
+                    if (keepLogged) sessionStorage.setItem('access', token)
+                    else localStorage.setItem('access', token)
+                })
+                .addCase(renewAccessAsync.rejected, (state) => {
+                    state.userId = null
+                    state.access = null
+                    state.isLoading = false
+                    localStorage.removeItem('access')
+                    sessionStorage.removeItem('access')
                 })
         },
         
 })
 
 export default userSlice.reducer
-export const {setKeepLoggedIn} = userSlice.actions
+export const {setKeepLoggedIn, clearUserData, setError} = userSlice.actions

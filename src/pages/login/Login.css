@@ -95,13 +95,17 @@
 
 #showpassword {
     cursor: pointer;
+    height: 25px;
+    width: 25px;
+    padding-right: 3px;
+    padding-top: 1px;
+}
+#showpassbutton {
+    all: initial;
     height: 27px;
     width: 30px;
     background-color: #294161;
     border-radius: 0px 5px 5px 0px;
-}
-#showpassbutton {
-    all: initial
 }
 .input {
     width: 200px;
