@@ -6,6 +6,7 @@ import { LogIn } from "../services/userService"
 interface UserState {
     userId: number | null
     access: string | null
+    access_exp: number | null
     isLoading: boolean
     error: string 
     keepLoggedin: boolean
@@ -19,6 +20,7 @@ interface JwtClaim {
 const initialState: UserState = {
     userId: null,
     access: null,
+    access_exp: null,
     isLoading: false,
     error: '',
     keepLoggedin: false
@@ -81,7 +83,9 @@ export const userSlice = createSlice( {
                 })
                 .addCase(logInAsync.fulfilled, (state, action) => {
                     state.access = action.payload.access_token
-                    state.userId = jwtDecode<JwtClaim>(action.payload.access_token).user_id
+                    const decodedToken = jwtDecode<JwtClaim>(action.payload.access_token)
+                    state.userId = decodedToken.user_id
+                    state.access_exp = decodedToken.exp
 
                     localStorage.removeItem('access')
                     sessionStorage.removeItem('access')
@@ -104,6 +108,7 @@ export const userSlice = createSlice( {
                     const decodedToken = jwtDecode<JwtClaim>(token)
                     state.userId = decodedToken.user_id
                     state.access = token
+                    state.access_exp = decodedToken.exp
                     state.isLoading = false
                     localStorage.removeItem('access')
                     sessionStorage.removeItem('access')
@@ -115,6 +120,7 @@ export const userSlice = createSlice( {
                 .addCase(loadSessionAsync.rejected, (state) => {
                     state.userId = null
                     state.access = null
+                    state.access_exp = null
                     state.isLoading = false
                     localStorage.removeItem('access')
                     sessionStorage.removeItem('access')
@@ -125,6 +131,7 @@ export const userSlice = createSlice( {
                 .addCase(renewAccessAsync.fulfilled, (state, action) => {
                     let token = action.payload
                     state.access = token
+                    state.access_exp = jwtDecode<JwtClaim>(action.payload).exp
                     state.isLoading = false
                     localStorage.removeItem('access')
                     sessionStorage.removeItem('access')
@@ -136,6 +143,7 @@ export const userSlice = createSlice( {
                 .addCase(renewAccessAsync.rejected, (state) => {
                     state.userId = null
                     state.access = null
+                    state.access_exp = null
                     state.isLoading = false
                     localStorage.removeItem('access')
                     sessionStorage.removeItem('access')

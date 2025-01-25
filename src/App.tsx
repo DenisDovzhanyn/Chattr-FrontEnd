@@ -4,17 +4,32 @@ import Login from './pages/login/Login'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Privateroute from './privateroute';
 import { useSelector, useDispatch } from 'react-redux';
-import { loadSessionAsync } from './store/userSlice';
+import { loadSessionAsync, renewAccessAsync } from './store/userSlice';
 import { AppDispatch, RootState } from './store/store';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+
 
 function App() {
-  const {access} = useSelector((state: RootState) => state.user)
+  const {access, access_exp} = useSelector((state: RootState) => state.user)
   const dispatch = useDispatch<AppDispatch>()
-  
+
   useEffect(() => {
     dispatch(loadSessionAsync())
   }, [])
+
+  const timeout = useRef(0)
+  useEffect(() => {
+    if (access && access_exp) {
+      const timeLeft = (access_exp * 1000) - (1 * 60 * 1000) - Date.now()
+      if(timeout.current) clearTimeout(timeout.current)
+      console.log('hello gangy, a new timeout has been set for ' + timeLeft)
+      if (timeLeft > 0) {
+        timeout.current = setTimeout(() => dispatch(renewAccessAsync()), timeLeft)
+      }
+    }
+
+    return () => clearTimeout(timeout.current);
+  },[access_exp])
 
   return (
     <>
