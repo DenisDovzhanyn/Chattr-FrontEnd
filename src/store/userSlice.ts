@@ -9,7 +9,7 @@ interface UserState {
     access_exp: number | null
     isLoading: boolean
     error: string 
-    keepLoggedin: boolean
+    keepLoggedIn: boolean
 }
 interface JwtClaim {
     user_id: number | null
@@ -23,7 +23,7 @@ const initialState: UserState = {
     access_exp: null,
     isLoading: false,
     error: '',
-    keepLoggedin: false
+    keepLoggedIn: false
 }
 
 export const logInAsync = createAsyncThunk(
@@ -63,7 +63,7 @@ export const userSlice = createSlice( {
     initialState,
     reducers: {
         setKeepLoggedIn: (state) => {
-            state.keepLoggedin = !state.keepLoggedin
+            state.keepLoggedIn = !state.keepLoggedIn
         },
         clearUserData: (state) => {
             state.access = null
@@ -89,10 +89,10 @@ export const userSlice = createSlice( {
 
                     localStorage.removeItem('access')
                     sessionStorage.removeItem('access')
-                    if (state.keepLoggedin) localStorage.setItem('access', action.payload.access_token)
+                    if (state.keepLoggedIn) localStorage.setItem('access', action.payload.access_token)
                     else sessionStorage.setItem('access', action.payload.access_token)
 
-                    localStorage.setItem('keepLoggedIn', `${state.keepLoggedin}`)
+                    localStorage.setItem('keepLoggedIn', `${state.keepLoggedIn}`)
 
                     state.isLoading = false;
                 })
@@ -114,8 +114,8 @@ export const userSlice = createSlice( {
                     sessionStorage.removeItem('access')
                     const keepLogged = Boolean(localStorage.getItem('keepLoggedIn'))
 
-                    if (keepLogged) sessionStorage.setItem('access', token)
-                    else localStorage.setItem('access', token)
+                    if (keepLogged) localStorage.setItem('access', token)
+                    else sessionStorage.setItem('access', token)
                 })
                 .addCase(loadSessionAsync.rejected, (state) => {
                     state.userId = null

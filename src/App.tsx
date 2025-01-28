@@ -1,6 +1,6 @@
 
 import './App.css'
-import Login from './pages/login/Login'
+import Login from './containers/login/Login'
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Privateroute from './privateroute';
 import { useSelector, useDispatch } from 'react-redux';
@@ -37,7 +37,7 @@ function App() {
         <Route path='/login' element={access ? <Navigate to ='/homepage' /> : <Login />} />
         <Route path='/login/forgotpassword' element={<div>uh oh someone forgot their password</div>} />
         <Route path='/homepage' element={<Privateroute/>}>
-          <Route path='/homepage' element={<div>lets go bro ur authenticated W IN CHAT</div>} />
+          <Route path='/homepage' element={<div>a</div>} />
         </Route>
         <Route path='*' element={access ? <Navigate to ='/homepage' /> : <Navigate to ='/login' />} />
       </Routes>

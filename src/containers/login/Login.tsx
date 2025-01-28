@@ -13,7 +13,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     
-    const { isLoading, error, keepLoggedin } = useSelector((state: RootState) => state.user);
+    const { isLoading, error, keepLoggedIn } = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSubmit = async (event: FormEvent) => {
@@ -21,7 +21,7 @@ function Login() {
         // hit api here to verify log in. however we need to check whether the user already has a JWT when they get to this page
         // AND if they will be using a password OR one time use key to determine which endpoint to consume
         // here we probably need to somehow switch to a loading icon right?
-        dispatch(logInAsync({ username, password }));
+        dispatch(logInAsync({ username, password, keepLoggedIn }));
         // I guess if we are still here after this dispatch that means that it failed right?????
         // actually we probably want to display an error on the input fields or somewhere on page if we get here
         // if valid we cache jwt here?
@@ -113,7 +113,7 @@ function Login() {
                     <label className="checkboxtext">
                         <input
                         type="checkbox"
-                        checked={keepLoggedin}
+                        checked={keepLoggedIn}
                         onChange={ () => dispatch(setKeepLoggedIn())}
                         />
                         Keep me logged in

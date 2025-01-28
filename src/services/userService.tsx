@@ -1,6 +1,7 @@
 export type LoginForm = {
     username: string,
-    password: string
+    password: string,
+    keepLoggedIn: boolean
 }
 
 
@@ -27,7 +28,7 @@ export async function renewAccess() {
 
     throw new Error(errMessage)
 }
-export async function LogIn({username, password}:LoginForm) {
+export async function LogIn({username, password, keepLoggedIn}:LoginForm) {
     let errMessage = 'Internal server error'
     try {
         const response = await fetch(`${import.meta.env.VITE_BASE_API}/api/login`,
@@ -36,7 +37,7 @@ export async function LogIn({username, password}:LoginForm) {
                 headers: {
                     'Content-Type': 'application/json' },
                 credentials: "include",
-                body: JSON.stringify({ username, password })
+                body: JSON.stringify({ username, password, keepLoggedIn })
             }
         )
 
