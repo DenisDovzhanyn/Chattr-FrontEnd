@@ -3,6 +3,9 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { LoginForm, renewAccess } from "../services/userService"
 import { LogIn } from "../services/userService"
 
+const ACCESS_KEY = 'access'
+const KEEP_LOGGED_IN_KEY = 'keepLoggedIn'
+
 interface UserState {
     userId: number | null
     access: string | null
@@ -21,7 +24,7 @@ const initialState: UserState = {
     userId: null,
     access: null,
     access_exp: null,
-    isLoading: false,
+    isLoading: true,
     error: '',
     keepLoggedIn: false
 }
@@ -34,17 +37,13 @@ export const logInAsync = createAsyncThunk(
 export const loadSessionAsync = createAsyncThunk(
     "user/loadSessionAsync",
     async () => {
-        const TOKEN_KEY = 'access'
-        let token = localStorage.getItem(TOKEN_KEY)
-        if (!token) token = sessionStorage.getItem(TOKEN_KEY)
+        
+        let token = getTokenFromStorage()
 
         let decodedToken = token ? jwtDecode<JwtClaim>(token) : null
 
         if (decodedToken && decodedToken.exp > Date.now() / 1000) return token
             
-        localStorage.removeItem('access')
-        sessionStorage.removeItem('access')
-
         return (await renewAccess()).access_token     
     }
 )
@@ -87,12 +86,7 @@ export const userSlice = createSlice( {
                     state.userId = decodedToken.user_id
                     state.access_exp = decodedToken.exp
 
-                    localStorage.removeItem('access')
-                    sessionStorage.removeItem('access')
-                    if (state.keepLoggedIn) localStorage.setItem('access', action.payload.access_token)
-                    else sessionStorage.setItem('access', action.payload.access_token)
-
-                    localStorage.setItem('keepLoggedIn', `${state.keepLoggedIn}`)
+                    storeToken(state.access!, state.keepLoggedIn)
 
                     state.isLoading = false;
                 })
@@ -110,20 +104,16 @@ export const userSlice = createSlice( {
                     state.access = token
                     state.access_exp = decodedToken.exp
                     state.isLoading = false
-                    localStorage.removeItem('access')
-                    sessionStorage.removeItem('access')
-                    const keepLogged = Boolean(localStorage.getItem('keepLoggedIn'))
 
-                    if (keepLogged) localStorage.setItem('access', token)
-                    else sessionStorage.setItem('access', token)
+                    storeToken(state.access!)
                 })
                 .addCase(loadSessionAsync.rejected, (state) => {
                     state.userId = null
                     state.access = null
                     state.access_exp = null
                     state.isLoading = false
-                    localStorage.removeItem('access')
-                    sessionStorage.removeItem('access')
+                    localStorage.removeItem(ACCESS_KEY)
+                    sessionStorage.removeItem(ACCESS_KEY)
                 })
                 .addCase(renewAccessAsync.pending, (state) => {
                     state.isLoading = true;
@@ -133,24 +123,41 @@ export const userSlice = createSlice( {
                     state.access = token
                     state.access_exp = jwtDecode<JwtClaim>(action.payload).exp
                     state.isLoading = false
-                    localStorage.removeItem('access')
-                    sessionStorage.removeItem('access')
 
-                    const keepLogged = Boolean(localStorage.getItem('keepLoggedIn'))
-                    if (keepLogged) sessionStorage.setItem('access', token)
-                    else localStorage.setItem('access', token)
+                    storeToken(state.access!)
                 })
                 .addCase(renewAccessAsync.rejected, (state) => {
                     state.userId = null
                     state.access = null
                     state.access_exp = null
                     state.isLoading = false
-                    localStorage.removeItem('access')
-                    sessionStorage.removeItem('access')
+                    localStorage.removeItem(ACCESS_KEY)
+                    sessionStorage.removeItem(ACCESS_KEY)
                 })
         },
         
 })
+
+
+const storeToken = (access_token: string, force_remember: boolean | null = null) => {
+    let storage = localStorage
+
+    if (force_remember === null) {
+        storage = localStorage.getItem(KEEP_LOGGED_IN_KEY) === 'true' ? localStorage : sessionStorage
+    } else if (force_remember === false){
+        storage = sessionStorage
+    } 
+
+    if (force_remember !== null) {
+        localStorage.setItem(KEEP_LOGGED_IN_KEY, `${force_remember}`)
+    }
+    storage.setItem(ACCESS_KEY, access_token)
+}
+
+export const getTokenFromStorage = () => {
+    const storage = localStorage.getItem(KEEP_LOGGED_IN_KEY) === 'true' ? localStorage : sessionStorage
+    return storage.getItem(ACCESS_KEY)
+}
 
 export default userSlice.reducer
 export const {setKeepLoggedIn, clearUserData, setError} = userSlice.actions

@@ -5,7 +5,7 @@ import { easeInOut } from "motion";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "../../store/store";
 import { logInAsync, setKeepLoggedIn } from "../../store/userSlice";
-
+import { Navigate } from "react-router-dom";
 
 
 function Login() {
@@ -13,7 +13,7 @@ function Login() {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     
-    const { isLoading, error, keepLoggedIn } = useSelector((state: RootState) => state.user);
+    const { isLoading, error, keepLoggedIn, access } = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch<AppDispatch>();
 
     const handleSubmit = async (event: FormEvent) => {
@@ -35,6 +35,7 @@ function Login() {
         setPassword(password);
     };
 
+    if (access) return <Navigate to='/homepage' />
     return (
         <div className="page" id="loginpage">
             <div className="video-background">
