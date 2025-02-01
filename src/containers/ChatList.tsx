@@ -33,7 +33,7 @@ function ChatList() {
             {chats.map((chat) => {
                 return <div className='chat'>
                     <div className='chatname'>
-                        {chat.users.map((user) => user.display_name + " ")}
+                        {chat.chat_name}
                     </div> 
                     {calcTime(chat.last_msg_time)} 
                 </div>

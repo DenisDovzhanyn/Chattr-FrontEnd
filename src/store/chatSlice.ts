@@ -11,6 +11,7 @@ interface ChatState {
 export interface Chat {
     id: number,
     last_msg_time: number
+    chat_name: string
     users: User[]
 }
 
