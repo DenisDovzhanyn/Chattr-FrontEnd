@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react'
 import './ChatList.css'
-import { loadChatsAsync } from '../store/chatSlice'
+import { loadChatsAsync } from '../../store/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
-import { RootState, AppDispatch } from '../store/store'
+import { RootState, AppDispatch } from '../../store/store'
+import {motion} from 'motion/react'
+import { easeInOut } from "motion";
 
 const calcTime = (timestamp: number) => {
     const now = Date.now()
@@ -30,6 +32,15 @@ function ChatList() {
 
     return ( 
         <div id="chatlist">
+            <button id='createchat' className='chatlistbutton'>
+                Create new chat
+            </button>
+            <button id='findrandomchat' className='chatlistbutton'>
+                Find random chat
+            </button>
+            <div>
+                Chats
+            </div>
             {chats.map((chat) => {
                 return <div className='chat'>
                     <div className='chatname'>

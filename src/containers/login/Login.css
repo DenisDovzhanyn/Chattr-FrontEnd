@@ -151,3 +151,40 @@
     width: 200px;
     border-radius: 5px 0px 0px 5px;
 }
+
+
+#submitbutton {
+  border-radius: 200px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 1s;
+  width: 200px;
+  max-width: 200px;
+  max-height: 43px;
+  background-color: #a1a1eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#submitbutton:hover {
+  background-color: #d3d3ff;
+}
+#submitbutton:focus,
+#submitbutton:focus-visible {
+  outline: none
+}
+
+#submitbutton:disabled {
+  background-color: #8a8a9b;
+}
+
+#submitbutton:hover:disabled {
+  background-color: #8a8a9b;
+  cursor: not-allowed;
+}
+
+

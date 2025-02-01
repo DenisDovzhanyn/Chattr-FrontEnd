@@ -2,8 +2,8 @@
 import { Outlet, Navigate } from 'react-router-dom';
 import { useSelector, useDispatch} from 'react-redux';
 import { RootState, AppDispatch } from './store/store';
-import Layout from './containers/Layout';
-import ChatList from './containers/ChatList';
+import Layout from './containers/layout/Layout';
+import ChatList from './containers/chatlist/ChatList';
 import { useEffect, useRef } from 'react';
 import { renewAccessAsync } from './store/userSlice';
 

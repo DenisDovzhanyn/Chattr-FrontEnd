@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { getChats } from "../services/ChatService"
+import { getChats, createChat } from "../services/ChatService"
 
 
 interface ChatState {
@@ -12,7 +12,7 @@ export interface Chat {
     id: number,
     last_msg_time: number
     chat_name: string
-    users: User[]
+    users?: User[]
 }
 
 export interface User {
@@ -32,6 +32,10 @@ export const loadChatsAsync = createAsyncThunk(
     async () => await getChats()
 )
 
+export const createNewChatAsync = createAsyncThunk(
+    "chats/createNewChatAsync",
+    async (chat_name: string) => await createChat(chat_name)
+)
 
 export const chatSlice = createSlice( {
     name: 'chats',
@@ -53,6 +57,12 @@ export const chatSlice = createSlice( {
             .addCase(loadChatsAsync.rejected, (state, action) =>{
                 state.error = action.error.message || ''
                 state.isLoading = false
+            })
+            .addCase(createNewChatAsync.fulfilled, (state, action) => {
+                state.chats.push(action.payload)
+            })
+            .addCase(createNewChatAsync.rejected, (state, action) => {
+                state.error = action.error.message || ''
             })
     }
 })
