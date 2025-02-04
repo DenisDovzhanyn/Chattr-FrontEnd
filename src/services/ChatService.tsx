@@ -29,7 +29,7 @@ export async function createChat(chat_name: string) {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(chat_name)
+                body: JSON.stringify({chat_name: chat_name})
                 
             }
         )

@@ -9,10 +9,12 @@
     justify-content: flex-start;
     align-items: center;
     flex-wrap: nowrap;
+    overflow-y: scroll;
 }
 
 .chatlistbutton {
     height: 50px;
+    min-height: 50px;
     width: 100%;
     background-color: #0a192d;
     border-style: none;
@@ -25,6 +27,7 @@
 
 .chat {
     height: 60px;
+    min-height: 60px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;

@@ -59,7 +59,7 @@ export const chatSlice = createSlice( {
                 state.isLoading = false
             })
             .addCase(createNewChatAsync.fulfilled, (state, action) => {
-                state.chats.push(action.payload)
+                state.chats = [action.payload.chats, ...state.chats]
             })
             .addCase(createNewChatAsync.rejected, (state, action) => {
                 state.error = action.error.message || ''

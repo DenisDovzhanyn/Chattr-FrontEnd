@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react'
 import './ChatList.css'
-import { loadChatsAsync } from '../../store/chatSlice'
+import { createNewChatAsync, loadChatsAsync } from '../../store/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
-import {motion} from 'motion/react'
-import { easeInOut } from "motion";
 
 const calcTime = (timestamp: number) => {
     const now = Date.now()
@@ -24,6 +22,8 @@ const calcTime = (timestamp: number) => {
 function ChatList() {
     const {chats} = useSelector((state: RootState) => state.chats)
     const dispatch = useDispatch<AppDispatch>()
+    const [createChatModalOpen, setCreateChatModalOpen] = useState(false);
+    const [newChatName, setNewChatName] = useState('')
 
     useEffect(() => {
 
@@ -32,10 +32,24 @@ function ChatList() {
 
     return ( 
         <div id="chatlist">
-            <button id='createchat' className='chatlistbutton'>
+            <dialog open={createChatModalOpen}>
+                <form>
+                    <input onChange={(e) => setNewChatName(e.target.value)}/>
+                    <button type='submit' onClick={(event) => {
+                        event.preventDefault()
+                        dispatch(createNewChatAsync(newChatName))
+                        setCreateChatModalOpen(false)}}>
+                        Create Chat
+                    </button>
+                </form>
+                <button onClick={() => (setCreateChatModalOpen(false))}>
+                    close
+                </button>
+            </dialog>
+            <button id='createchat' className='chatlistbutton' onClick={() => {setCreateChatModalOpen(true)}}>
                 Create new chat
             </button>
-            <button id='findrandomchat' className='chatlistbutton'>
+            <button id='findrandomchat' className='chatlistbutton' >
                 Find random chat
             </button>
             <div>
@@ -50,6 +64,7 @@ function ChatList() {
                 </div>
             })}
         </div>
+        
     )
 }
 

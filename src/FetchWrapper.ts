@@ -1,8 +1,4 @@
-
-
-import { appDispatch } from "./store/store";
-
-import { clearUserData, getTokenFromStorage, renewAccessAsync } from "./store/userSlice"
+import {getTokenFromStorage} from "./store/userSlice"
 
 
 export interface fetchWithAuthOptions extends RequestInit {
