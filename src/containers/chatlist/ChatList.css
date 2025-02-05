@@ -12,6 +12,23 @@
     overflow-y: scroll;
 }
 
+#createchatmodal {
+    background-color: #172c47;
+    top: 40%;
+    position: fixed;
+    bottom: 60%;
+}
+
+#modalbackground {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: gray;
+    opacity: 0.5;
+}
+
 .chatlistbutton {
     height: 50px;
     min-height: 50px;
@@ -48,3 +65,4 @@
 .chatname {
     overflow: hidden;
 }
+

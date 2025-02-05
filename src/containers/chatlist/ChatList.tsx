@@ -3,6 +3,7 @@ import './ChatList.css'
 import { createNewChatAsync, loadChatsAsync } from '../../store/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
+import { blockquote, create } from 'motion/react-client'
 
 const calcTime = (timestamp: number) => {
     const now = Date.now()
@@ -32,7 +33,9 @@ function ChatList() {
 
     return ( 
         <div id="chatlist">
-            <dialog open={createChatModalOpen}>
+
+            <div id='modalbackground' style={{display: createChatModalOpen ? 'block' : 'none'}} />
+            <dialog open={createChatModalOpen} id='createchatmodal'>
                 <form>
                     <input onChange={(e) => setNewChatName(e.target.value)}/>
                     <button type='submit' onClick={(event) => {
@@ -46,6 +49,7 @@ function ChatList() {
                     close
                 </button>
             </dialog>
+            
             <button id='createchat' className='chatlistbutton' onClick={() => {setCreateChatModalOpen(true)}}>
                 Create new chat
             </button>
@@ -56,7 +60,7 @@ function ChatList() {
                 Chats
             </div>
             {chats.map((chat) => {
-                return <div className='chat'>
+                return <div className='chat' key={chat.id}>
                     <div className='chatname'>
                         {chat.chat_name}
                     </div> 
