@@ -36,12 +36,14 @@ function ChatList() {
 
             <div id='modalbackground' style={{display: createChatModalOpen ? 'block' : 'none'}} />
             <dialog open={createChatModalOpen} id='createchatmodal'>
-                <form>
-                    <input onChange={(e) => setNewChatName(e.target.value)}/>
-                    <button type='submit' onClick={(event) => {
-                        event.preventDefault()
-                        dispatch(createNewChatAsync(newChatName))
-                        setCreateChatModalOpen(false)}}>
+                <form onSubmit={(event) => {
+                    event.preventDefault()
+                    dispatch(createNewChatAsync(newChatName))
+                    setCreateChatModalOpen(false)
+                    setNewChatName('')
+                }}>
+                    <input onChange={(e) => setNewChatName(e.target.value)} className='input' type='text' value={newChatName} required/>
+                    <button type='submit' disabled = {newChatName ? false : true}>
                         Create Chat
                     </button>
                 </form>

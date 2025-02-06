@@ -71,6 +71,7 @@ function Login() {
                             onChange={(e) =>
                                 handleUsernameInputChange(e.target.value)
                             }
+                            value={username}
                             style={{border: error ? '1px solid #ff6e6e' : ''}}
                             required
                         />
@@ -91,6 +92,7 @@ function Login() {
                                     borderLeft: error ? '1px solid #ff6e6e' : '',
                                     borderBottom: error ? '1px solid #ff6e6e' : ''
                                 }}
+                                value={password}
                                 required
                             />
                             <button type="button" onClick={() => setShowPassword(!showPassword)} id="showpassbutton" 
