@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import './ChatList.css'
 import { createNewChatAsync, loadChatsAsync } from '../../store/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
@@ -25,34 +25,56 @@ function ChatList() {
     const dispatch = useDispatch<AppDispatch>()
     const [createChatModalOpen, setCreateChatModalOpen] = useState(false);
     const [newChatName, setNewChatName] = useState('')
+    const inputRef = useRef<HTMLInputElement>(null)
 
     useEffect(() => {
 
         dispatch(loadChatsAsync())
     }, [])
-
+    
+    useEffect(() => {
+        if (createChatModalOpen && inputRef.current) {
+          inputRef.current.focus();
+          inputRef.current.select();
+        }
+      }, [createChatModalOpen]);
+    
     return ( 
         <div id="chatlist">
 
             <div id='modalbackground' style={{display: createChatModalOpen ? 'block' : 'none'}} />
             <dialog open={createChatModalOpen} id='createchatmodal'>
-                <form onSubmit={(event) => {
-                    event.preventDefault()
-                    dispatch(createNewChatAsync(newChatName))
-                    setCreateChatModalOpen(false)
-                    setNewChatName('')
-                }}>
-                    <input onChange={(e) => setNewChatName(e.target.value)} className='input' type='text' value={newChatName} required/>
-                    <button type='submit' disabled = {newChatName ? false : true}>
+
+                <label id='createchatlabel'>
+                    Chat name
+                    <input onChange={(e) => setNewChatName(e.target.value)} 
+                        className='input' 
+                        type='text' 
+                        value={newChatName}
+                        ref={inputRef}
+                        required
+                    />
+                </label>
+
+                <div id='modalbuttoncontainer'>
+                    <button onClick={() => (setCreateChatModalOpen(false))}>
+                        close
+                    </button>
+                    <button disabled = {newChatName ? false : true} onClick={(event) => {
+                        event.preventDefault()
+                        dispatch(createNewChatAsync(newChatName))
+                        setCreateChatModalOpen(false)
+                        setNewChatName('')
+                    }}>
                         Create Chat
                     </button>
-                </form>
-                <button onClick={() => (setCreateChatModalOpen(false))}>
-                    close
-                </button>
+                </div>
+
             </dialog>
             
-            <button id='createchat' className='chatlistbutton' onClick={() => {setCreateChatModalOpen(true)}}>
+            <button id='createchat' className='chatlistbutton' onClick={() => {
+                setCreateChatModalOpen(true)
+            }}>
                 Create new chat
             </button>
             <button id='findrandomchat' className='chatlistbutton' >
