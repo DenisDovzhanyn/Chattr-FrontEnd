@@ -20,8 +20,12 @@
     bottom: 60%;
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    width: 300px;
+    align-items: flex-end;
+    border-style: none;
+    border-radius: 3px;
 }
+
 
 
 #modalbackground {
@@ -38,15 +42,42 @@
     flex-direction: column;
     gap: 10px;
 }
-#modalbuttoncontainer {
-    display: flex;
-    justify-content: space-between;
+
+#modalexitbutton {
+    background-color: #172c47;
+    border-style: none;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+}
+
+
+#modalbutton {
+    border-radius: 5px;
+    border-style: none;
+    background-color: #a1a1eb;
+    width: 100px;
+    height: 40px;
+    transition: background-color 1s;
+    margin-top: 20px;
+}
+
+#modalbutton:hover {
+    background-color: #d3d3ff;
+}
+
+#modalbutton:disabled {
+    background-color: #8a8a9b;
 }
 
 #createchatlabel {
     display: flex;
     flex-direction: column;
     color: #dddddd;
+    width: 100%;
+}
+#chatnameinput {
+    width: 100%;
 }
 
 .chatlistbutton {
