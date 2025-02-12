@@ -9,6 +9,7 @@ import { renewAccessAsync } from './store/userSlice';
 
 export default ()  => {
     const {access, access_exp, isLoading} = useSelector((state: RootState) => state.user)
+    const {currentlySelected} = useSelector((state: RootState) => state.chats)
     const dispatch = useDispatch<AppDispatch>()
     const timeout = useRef(0)
 

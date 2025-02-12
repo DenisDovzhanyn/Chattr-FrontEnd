@@ -106,6 +106,8 @@
     border-top-style: solid;
     border-width: thin;
     border-color: #1e2323;
+    background-color: #0a192d;
+    color: #dddddd;
     box-sizing: border-box;
     padding-left: 10px;
     padding-right: 10px;

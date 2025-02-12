@@ -6,6 +6,7 @@ interface ChatState {
     chats: Chat[]
     isLoading: boolean
     error: string
+    currentlySelected: number | null
 }
 
 export interface Chat {
@@ -24,7 +25,8 @@ export interface User {
 const initialState: ChatState = {
     chats: [],
     isLoading: false,
-    error: ''
+    error: '',
+    currentlySelected: null
 }
 
 export const loadChatsAsync = createAsyncThunk(
@@ -41,6 +43,9 @@ export const chatSlice = createSlice( {
     name: 'chats',
     initialState,
     reducers: {
+        setCurrentlySelected: (state, action) => {
+            state.currentlySelected = action.payload
+        }
 
     },
     extraReducers: (builder) => {
@@ -69,3 +74,4 @@ export const chatSlice = createSlice( {
 
 
 export default chatSlice.reducer
+export const {setCurrentlySelected} = chatSlice.actions

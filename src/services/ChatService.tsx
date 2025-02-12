@@ -20,6 +20,27 @@ export async function getChats() {
     throw new Error(errMessage)
 }
 
+export async function getChatMessages(chat_id: number) {
+    let errMessage = 'Internal server error'
+
+    try {
+        const response = await fetchWithAuth(`${import.meta.env.VITE_BASE_API}/api/chats/messages?chat_id=${chat_id}`,
+            {
+                method: 'GET',
+                headers: {
+
+                }
+            }
+        )
+
+        return response
+    } catch (err) {
+
+    }
+    throw new Error(errMessage)
+
+}
+
 export async function createChat(chat_name: string) {
     let errMessage = 'Internal server error'
     try {

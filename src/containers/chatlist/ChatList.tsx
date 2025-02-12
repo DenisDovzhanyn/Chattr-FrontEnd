@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import './ChatList.css'
-import { createNewChatAsync, loadChatsAsync } from '../../store/chatSlice'
+import { createNewChatAsync, loadChatsAsync, setCurrentlySelected } from '../../store/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
 import { blockquote, create } from 'motion/react-client'
@@ -86,12 +86,12 @@ function ChatList() {
                 Chats
             </div>
             {chats.map((chat) => {
-                return <div className='chat' key={chat.id}>
+                return <button className='chat' key={chat.id} onClick={() => dispatch(setCurrentlySelected(chat.id))}>
                     <div className='chatname'>
                         {chat.chat_name}
                     </div> 
                     {calcTime(chat.last_msg_time)} 
-                </div>
+                </button>
             })}
         </div>
         

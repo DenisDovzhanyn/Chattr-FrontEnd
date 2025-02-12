@@ -1,6 +1,7 @@
 
 import './App.css'
 import Login from './containers/login/Login'
+import ChatLayout from './containers/chatLayout/chatLayout';
 import { Routes, Route } from 'react-router-dom';
 import Privateroute from './privateroute';
 import { useDispatch } from 'react-redux';
@@ -27,7 +28,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/login/forgotpassword' element={<div>uh oh someone forgot their password</div>} />
         <Route path='/homepage' element={<Privateroute/>}>
-          <Route path='/homepage' element={<div>a</div>} />
+          <Route path='/homepage' element={<ChatLayout />} />
         </Route>
         <Route path='*' element={<Login />} />
       </Routes>
