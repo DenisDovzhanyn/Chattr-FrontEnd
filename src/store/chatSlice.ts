@@ -1,12 +1,12 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { getChats, createChat } from "../services/ChatService"
+import { getChats, createChat, getChatMessages } from "../services/ChatService"
 
 
 interface ChatState {
     chats: Chat[]
     isLoading: boolean
     error: string
-    currentlySelected: number | null
+    currentlySelected?: Chat
 }
 
 export interface Chat {
@@ -14,6 +14,16 @@ export interface Chat {
     last_msg_time: number
     chat_name: string
     users?: User[]
+    messages?: Message[]
+
+}
+
+interface Message {
+    id: number,
+    content: string,
+    chat_id: number,
+    user_id: number,
+    inserted_at: number
 }
 
 export interface User {
@@ -26,12 +36,16 @@ const initialState: ChatState = {
     chats: [],
     isLoading: false,
     error: '',
-    currentlySelected: null
 }
 
 export const loadChatsAsync = createAsyncThunk(
     "chats/loadChatsAsync",
     async () => await getChats()
+)
+
+export const selectChatAsync = createAsyncThunk(
+    "chats/selectChatAsync",
+    async (chat_id: number) => await getChatMessages(chat_id) 
 )
 
 export const createNewChatAsync = createAsyncThunk(
@@ -43,9 +57,6 @@ export const chatSlice = createSlice( {
     name: 'chats',
     initialState,
     reducers: {
-        setCurrentlySelected: (state, action) => {
-            state.currentlySelected = action.payload
-        }
 
     },
     extraReducers: (builder) => {
@@ -63,15 +74,35 @@ export const chatSlice = createSlice( {
                 state.error = action.error.message || ''
                 state.isLoading = false
             })
+            .addCase(createNewChatAsync.pending, (state) => {
+                state.isLoading = true
+            })
             .addCase(createNewChatAsync.fulfilled, (state, action) => {
                 state.chats = [action.payload.chats, ...state.chats]
+                state.isLoading = false
             })
             .addCase(createNewChatAsync.rejected, (state, action) => {
                 state.error = action.error.message || ''
+                state.isLoading = false
+            })
+            .addCase(selectChatAsync.pending, (state) => {
+                state.isLoading = true
+            })
+            .addCase(selectChatAsync.fulfilled, (state, action) => {
+                const messages: Message[] = action.payload.messages
+
+                const chat = {...(state.chats.find(chat => chat.id == action.payload.chat_id) as Chat)}
+                chat.messages = messages
+                
+                state.currentlySelected = chat
+                state.isLoading = false
+            })
+            .addCase(selectChatAsync.rejected, (state, action) => {
+                state.error = action.error.message || ''
+                state.isLoading = false
             })
     }
 })
 
 
 export default chatSlice.reducer
-export const {setCurrentlySelected} = chatSlice.actions
