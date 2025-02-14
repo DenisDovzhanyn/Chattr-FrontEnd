@@ -14,7 +14,7 @@ export async function getChats() {
 
         return response
     } catch (err) {
-        
+        if(err instanceof Error) errMessage = err.message
     }
 
     throw new Error(errMessage)
@@ -35,7 +35,7 @@ export async function getChatMessages(chat_id: number) {
 
         return response
     } catch (err) {
-
+        if (err instanceof Error) errMessage = err.message
     }
     throw new Error(errMessage)
 
@@ -57,7 +57,7 @@ export async function createChat(chat_name: string) {
 
         return response
     } catch (err) {
-
+        if (err instanceof Error) errMessage = err.message
     }
     throw new Error(errMessage)
 }

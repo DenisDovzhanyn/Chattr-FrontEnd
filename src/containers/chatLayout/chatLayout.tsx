@@ -1,34 +1,36 @@
 import './chatLayout.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
-import { useEffect, useState } from 'react'
-import { getChatMessages } from '../../services/ChatService'
-
-
+import { useMemo } from 'react'
 
 function ChatLayout() {
     const {currentlySelected} = useSelector((state: RootState) => state.chats)
     
-    
-    
-
-    // useEffect(() => {
-    //     const getChats = async () => {
-    //         if(currentlySelected) {
-    //             const chat = await getChatMessages(currentlySelected)
-    //             setMessages(chat.messages)
-    //         }
-    //     }
-    //     getChats()
-    // }, [currentlySelected])
+    const idToDisplay = useMemo(() => {
+        const map = new Map<number, string>()
+        currentlySelected?.users?.forEach(user => {
+            map.set(user.id, user.display_name)
+        });
+        return map
+    }, [currentlySelected])
 
     if (currentlySelected === undefined) return <div> Please Select A Chat</div>
-    if(currentlySelected.messages === undefined || currentlySelected.messages.length == 0) return <div>no messages for chat {currentlySelected.chat_name}</div>
+    if (currentlySelected.messages === undefined || currentlySelected.messages.length == 0) return <div>no messages for chat {currentlySelected.chat_name}</div>
     return (
-        <div id='messages'>
+        <div id='chatlayout'>
             <h2>chat: {currentlySelected.chat_name}</h2>
-            {currentlySelected.messages.map((message) => {
-                return <div>{message.content}</div>
+            {currentlySelected.messages.map((message, index) => {
+                if (index != 0 && currentlySelected.messages![index - 1].user_id === message.user_id) {
+                    return <div className='messagebox'>
+                        {message.content}
+                        </div>
+                }
+                return <div className='messagebox'>
+                    <div id='displayname'>
+                        {idToDisplay.has(message.user_id) ? idToDisplay.get(message.user_id) : 'unknown user'}
+                    </div>
+                    {message.content}
+                </div>
             })}
         </div>
     )

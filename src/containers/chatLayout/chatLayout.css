@@ -1,0 +1,11 @@
+.messagebox {
+
+}
+
+#chatlayout {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: scroll;
+    width: 100%;
+}

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import './ChatList.css'
-import { createNewChatAsync, loadChatsAsync, selectChatAsync, setCurrentlySelected } from '../../store/chatSlice'
+import { createNewChatAsync, loadChatsAsync, selectChatAsync } from '../../store/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
-import { blockquote, create } from 'motion/react-client'
+
 
 const calcTime = (timestamp: number) => {
     const now = Date.now()
