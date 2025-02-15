@@ -1,8 +1,5 @@
 #chatlist {
     background-color: #0a192d;
-    border-color: white;
-    border-style: solid;
-    border-width: 1px;
     width: 250px;
     min-width: 250px;
     display: flex;
@@ -103,20 +100,19 @@
     align-items: center;
     width: 100%;
     gap: 10px;
-    border-bottom-style: solid;
-    border-top-style: solid;
-    border-width: thin;
-    border-color: #1e2323;
     background-color: #0a192d;
     color: #dddddd;
     box-sizing: border-box;
     padding-left: 10px;
     padding-right: 10px;
     white-space: nowrap;
+    border-style: none;
+}
+.chat:hover {
+    background-color: #0e213a;
 }
 
 
 .chatname {
     overflow: hidden;
 }
-

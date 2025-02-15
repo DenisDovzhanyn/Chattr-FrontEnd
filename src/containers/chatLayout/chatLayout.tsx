@@ -2,7 +2,7 @@ import './chatLayout.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
 import { useMemo } from 'react'
-
+import { calcTimeFull } from '../chatlist/ChatList'
 function ChatLayout() {
     const {currentlySelected} = useSelector((state: RootState) => state.chats)
     
@@ -25,9 +25,12 @@ function ChatLayout() {
                         {message.content}
                         </div>
                 }
-                return <div className='messagebox'>
-                    <div id='displayname'>
+                return <div className='messagebox' style={{marginTop: '20px'}}>
+                    <div className='displayname'>
                         {idToDisplay.has(message.user_id) ? idToDisplay.get(message.user_id) : 'unknown user'}
+                        <div className='messagetime'>
+                            {calcTimeFull(message.inserted_at) + ' ago'}
+                        </div>
                     </div>
                     {message.content}
                 </div>

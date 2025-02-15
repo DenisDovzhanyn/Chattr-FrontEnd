@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
 
 
-const calcTime = (timestamp: number) => {
+export const calcTime = (timestamp: number) => {
     const now = Date.now()
     const past = new Date(timestamp)
 
@@ -20,6 +20,23 @@ const calcTime = (timestamp: number) => {
     const weeks = Math.floor(days / 7)
     return `${weeks}w`
 }
+
+export const calcTimeFull = (timestamp: number) => {
+    const now = Date.now()
+    const past = new Date(timestamp)
+
+    const seconds = Math.floor((now - past.getTime()) / 1000)
+    if (seconds < 60) return `${seconds} seconds`
+    const minutes = Math.floor(seconds / 60)
+    if (minutes < 60) return `${minutes} minutes`
+    const hours = Math.floor(minutes / 60)
+    if (hours < 24) return `${hours} hours`
+    const days = Math.floor(hours / 24)
+    if (days < 7) return `${days} days`
+    const weeks = Math.floor(days / 7)
+    return `${weeks} weeks`
+}
+
 function ChatList() {
     const {chats} = useSelector((state: RootState) => state.chats)
     const dispatch = useDispatch<AppDispatch>()

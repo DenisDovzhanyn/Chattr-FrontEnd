@@ -2,10 +2,23 @@
 
 }
 
+.displayname {
+    font-size: larger;
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 10px;
+}
 #chatlayout {
     display: flex;
     flex-direction: column;
     gap: 10px;
     overflow-y: scroll;
     width: 100%;
+    padding-left: 50px;
+}
+
+.messagetime {
+    font-size: small;
 }
