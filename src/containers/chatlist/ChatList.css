@@ -8,6 +8,7 @@
     align-items: center;
     flex-wrap: nowrap;
     overflow-y: scroll;
+    padding-left: 10px;
 }
 
 #createchatmodal:open {
@@ -107,6 +108,7 @@
     padding-right: 10px;
     white-space: nowrap;
     border-style: none;
+    border-radius: 3px;
 }
 .chat:hover {
     background-color: #0e213a;

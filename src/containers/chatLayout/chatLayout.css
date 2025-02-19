@@ -13,12 +13,41 @@
 #chatlayout {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    overflow-y: scroll;
+    overflow: hidden;
     width: 100%;
+
+}
+#chatname {
+    padding-left: 50px;
+    border-bottom: 1px solid white;
+    margin-bottom: 0px;
+    padding-bottom: 20px;
+}
+.messagetime {
+    font-size: small;
+}
+
+
+#messagecontainer {
+    overflow-y: scroll;
     padding-left: 50px;
 }
 
-.messagetime {
-    font-size: small;
+#chatbox {
+    border: 1px solid #3b3939;
+    max-height: 150px;
+    overflow-y: auto;
+    min-height: 35px;
+    margin-bottom: 15px;
+    margin-left: 50px;
+    margin-right: 50px;
+    border-radius: 3px;
+    background-color: #292727;
+    margin-top: 10px;
+}
+#chatboxcontent {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 5px;
+    outline: none;
 }
