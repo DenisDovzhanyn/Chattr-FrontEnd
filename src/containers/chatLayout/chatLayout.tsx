@@ -1,11 +1,24 @@
 import './chatLayout.css'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { calcTimeFull } from '../chatlist/ChatList'
+import useWebSocket, {ReadyState} from 'react-use-websocket'
 function ChatLayout() {
     const {currentlySelected} = useSelector((state: RootState) => state.chats)
+    const {userId, access} = useSelector((state: RootState) => state.user)
     const [newMessage, setNewMessage] = useState('')
+    const WS_URL = 'ws://localhost:4001/socket/websocket'
+    const chatbox = useRef<HTMLDivElement>(null)
+
+    const {sendJsonMessage} = useWebSocket(
+            WS_URL,
+            {
+                queryParams: {token: access!},
+                shouldReconnect: () => true,
+                share: true
+            }
+        )
 
     const idToDisplay = useMemo(() => {
         const map = new Map<number, string>()
@@ -15,14 +28,38 @@ function ChatLayout() {
         return map
     }, [currentlySelected])
 
+    const onMessageSend = (e: any) => {
+        if (e.key === 'Enter') {
+            sendJsonMessage({
+                topic: "chat:" + currentlySelected?.id,
+                event: "new_msg",
+                payload: {
+                    content: newMessage
+                },
+                ref: userId
+            })
+            //@ts-ignore
+            e.target.innerHTML = ""
+            setNewMessage("")
+            return false
+        } else {
+            //@ts-ignore
+            setNewMessage(e.target.innerHTML)
+        }
+    }
+
+    useEffect(() => {
+        if (chatbox != null && chatbox.current != null) {
+            chatbox.current.scrollTop = chatbox.current.scrollHeight
+        }
+    }, [currentlySelected?.messages])
     if (currentlySelected === undefined) return <div> Please Select A Chat</div>
-    if (currentlySelected.messages === undefined || currentlySelected.messages.length == 0) return <div>no messages for chat {currentlySelected.chat_name}</div>
     return (
 
             <div id='chatlayout'>
                 <h2 id='chatname'>chat: {currentlySelected.chat_name}</h2>
-                <div id='messagecontainer'>
-                    {currentlySelected.messages.map((message, index) => {
+                <div id='messagecontainer' ref={chatbox}>
+                    {currentlySelected.messages!.map((message, index) => {
                         if (index != 0 && currentlySelected.messages![index - 1].user_id === message.user_id) {
                             return <div className='messagebox'>
                                 {message.content}
@@ -41,8 +78,11 @@ function ChatLayout() {
                 </div>
 
                 <div id='chatbox'>
-                    <div id='chatboxcontent'contentEditable="plaintext-only" onKeyDown={(e) => console.log(e)}>
-
+                    <div id='chatboxcontent'contentEditable="plaintext-only" onKeyUp={onMessageSend} onKeyDown={(e) => {if(e.key === 'Enter' ) 
+                        e.preventDefault()
+                        return false
+                    }}>
+                        
                     </div>
                 </div>
             </div>

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import './ChatList.css'
-import { createNewChatAsync, loadChatsAsync, selectChatAsync } from '../../store/chatSlice'
+import { createNewChatAsync, loadChatsAsync, selectChatAsync, addMessageToChat } from '../../store/chatSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
-
+import useWebSocket, {ReadyState} from 'react-use-websocket'
 
 export const calcTime = (timestamp: number) => {
     const now = Date.now()
@@ -36,19 +36,62 @@ export const calcTimeFull = (timestamp: number) => {
     const weeks = Math.floor(days / 7)
     return `${weeks} weeks`
 }
-
+interface Msg {
+    event: string,
+    payload: {
+        [key: string]: any
+    },
+    topic: string
+}
 function ChatList() {
     const {chats} = useSelector((state: RootState) => state.chats)
+    const {access, userId} = useSelector((state: RootState) => state.user) 
     const dispatch = useDispatch<AppDispatch>()
     const [createChatModalOpen, setCreateChatModalOpen] = useState(false);
     const [newChatName, setNewChatName] = useState('')
     const inputRef = useRef<HTMLInputElement>(null)
+    const WS_URL = 'ws://localhost:4001/socket/websocket'
+
+    const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
+        WS_URL,
+        {
+            queryParams: {token: access!},
+            shouldReconnect: () => true,
+            share: true
+        }
+    )
 
     useEffect(() => {
 
         dispatch(loadChatsAsync())
     }, [])
     
+    useEffect(() => {
+        if (readyState === ReadyState.OPEN) {
+            chats.forEach((chat) => {
+                sendJsonMessage({
+                    topic: "chat:" + chat.id,
+                    event: "phx_join",
+                    payload: {},
+                    ref: userId
+                })
+                console.log('connecting to chat' + chat.id)
+            })
+        }
+    }, [readyState])
+
+    useEffect(() => {
+        
+        if (lastJsonMessage !== null) {
+            console.log(lastJsonMessage)
+            const msg = lastJsonMessage as Msg
+            
+            if (msg.event === "new_msg") {
+                const chat_id = Number(msg.topic.substring(5))
+                dispatch(addMessageToChat({chat_id: chat_id, message: msg.payload.message}))
+            }
+        }
+    }, [lastJsonMessage])
     useEffect(() => {
         if (createChatModalOpen && inputRef.current) {
           inputRef.current.focus();
