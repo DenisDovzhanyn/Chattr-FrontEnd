@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { getChats, createChat, getChatMessages } from "../services/ChatService"
-
+import useWebSocket from "react-use-websocket"
 
 interface ChatState {
     chats: Chat[]

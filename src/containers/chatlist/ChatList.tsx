@@ -81,6 +81,17 @@ function ChatList() {
     }, [readyState])
 
     useEffect(() => {
+        if (readyState === ReadyState.OPEN) {
+            sendJsonMessage({
+                topic: "chat:" + chats[0].id,
+                event: "phx_join",
+                payload: {},
+                ref: userId
+            })
+        }
+    }, [chats])
+
+    useEffect(() => {
         
         if (lastJsonMessage !== null) {
             console.log(lastJsonMessage)
