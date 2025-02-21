@@ -31,6 +31,7 @@
 #messagecontainer {
     overflow-y: scroll;
     padding-left: 50px;
+    height: 100%;
 }
 
 #chatbox {
