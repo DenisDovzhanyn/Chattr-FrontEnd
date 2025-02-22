@@ -60,11 +60,15 @@ function ChatLayout() {
                 <h2 id='chatname'>chat: {currentlySelected.chat_name}</h2>
                 <div id='messagecontainer' ref={chatbox}>
                     {currentlySelected.messages!.map((message, index) => {
-                        if (index != 0 && currentlySelected.messages![index - 1].user_id === message.user_id) {
+                            // wow this is disgusting
+                        if (index != 0 
+                            && currentlySelected.messages![index - 1].user_id === message.user_id 
+                            && (Math.floor((new Date(message.inserted_at).getTime() - new Date(currentlySelected.messages![index - 1].inserted_at).getTime()) / 1000)) < 300) {
                             return <div className='messagebox'>
                                 {message.content}
                                 </div>
                         }
+
                         return <div className='messagebox' style={{marginTop: '20px'}}>
                             <div className='displayname'>
                                 {idToDisplay.has(message.user_id) ? idToDisplay.get(message.user_id) : 'unknown user'}
@@ -78,7 +82,7 @@ function ChatLayout() {
                 </div>
 
                 <div id='chatbox'>
-                    <div id='chatboxcontent'contentEditable="plaintext-only" onKeyUp={onMessageSend} onKeyDown={(e) => {if(e.key === 'Enter' ) 
+                    <div id='chatboxcontent' contentEditable="plaintext-only" onKeyUp={onMessageSend} onKeyDown={(e) => {if(e.key === 'Enter' ) 
                         e.preventDefault()
                         return false
                     }}>

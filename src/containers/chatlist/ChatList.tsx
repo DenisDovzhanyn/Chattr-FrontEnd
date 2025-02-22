@@ -50,6 +50,7 @@ function ChatList() {
     const [createChatModalOpen, setCreateChatModalOpen] = useState(false);
     const [newChatName, setNewChatName] = useState('')
     const inputRef = useRef<HTMLInputElement>(null)
+    const amountOfChats = useRef(chats.length)
     const WS_URL = 'ws://localhost:4001/socket/websocket'
 
     const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
@@ -81,7 +82,7 @@ function ChatList() {
     }, [readyState])
 
     useEffect(() => {
-        if (readyState === ReadyState.OPEN) {
+        if (readyState === ReadyState.OPEN && amountOfChats.current < chats.length) {
             sendJsonMessage({
                 topic: "chat:" + chats[0].id,
                 event: "phx_join",
@@ -138,6 +139,7 @@ function ChatList() {
                     dispatch(createNewChatAsync(newChatName))
                     setCreateChatModalOpen(false)
                     setNewChatName('')
+                    amountOfChats.current += 1
                 }}>
                     Create Chat
                 </button>

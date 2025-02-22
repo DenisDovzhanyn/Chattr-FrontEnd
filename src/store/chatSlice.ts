@@ -64,6 +64,15 @@ export const chatSlice = createSlice( {
                     messages: [...(state.currentlySelected?.messages || []), action.payload.message]
                 } as Chat
             }
+
+            const chatIndex = state.chats.findIndex((chat) => chat.id == action.payload.message.chat_id)
+            const chat = {
+                ...state.chats[chatIndex],
+                last_msg_time: action.payload.message.inserted_at
+            }
+
+            state.chats = [chat, ...(state.chats.filter((oldChat) => oldChat.id == action.payload.chat_id ? false : true))]
+            
         }
     },
     extraReducers: (builder) => {
