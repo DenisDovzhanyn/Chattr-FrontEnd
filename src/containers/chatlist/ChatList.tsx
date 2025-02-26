@@ -58,12 +58,11 @@ function ChatList() {
         {
             queryParams: {token: access!},
             shouldReconnect: () => true,
-            share: true
+            share: true,
         }
     )
 
     useEffect(() => {
-
         dispatch(loadChatsAsync())
     }, [])
     
@@ -76,12 +75,27 @@ function ChatList() {
                     payload: {},
                     ref: userId
                 })
-                console.log('connecting to chat' + chat.id)
             })
         }
     }, [readyState])
 
     useEffect(() => {
+        const interval = setInterval(() => {
+            sendJsonMessage({
+                topic: "phoenix",
+                event: "heartbeat",
+                payload: {},
+                ref: userId
+            })
+        }, 55000)
+
+
+        return () => clearInterval(interval)
+    }, [])
+
+    useEffect(() => {
+        if (amountOfChats.current == 0 ) amountOfChats.current = chats.length
+
         if (readyState === ReadyState.OPEN && amountOfChats.current < chats.length) {
             sendJsonMessage({
                 topic: "chat:" + chats[0].id,
@@ -89,13 +103,14 @@ function ChatList() {
                 payload: {},
                 ref: userId
             })
+            amountOfChats.current = chats.length
         }
+        
     }, [chats])
 
     useEffect(() => {
         
         if (lastJsonMessage !== null) {
-            console.log(lastJsonMessage)
             const msg = lastJsonMessage as Msg
             
             if (msg.event === "new_msg") {
@@ -104,6 +119,7 @@ function ChatList() {
             }
         }
     }, [lastJsonMessage])
+
     useEffect(() => {
         if (createChatModalOpen && inputRef.current) {
           inputRef.current.focus();
@@ -139,7 +155,7 @@ function ChatList() {
                     dispatch(createNewChatAsync(newChatName))
                     setCreateChatModalOpen(false)
                     setNewChatName('')
-                    amountOfChats.current += 1
+                    
                 }}>
                     Create Chat
                 </button>
