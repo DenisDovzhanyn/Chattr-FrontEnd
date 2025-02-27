@@ -10,16 +10,17 @@ function ChatLayout() {
     const [newMessage, setNewMessage] = useState('')
     const WS_URL = 'ws://localhost:4001/socket/websocket'
     const chatbox = useRef<HTMLDivElement>(null)
+    const {currTime} = useSelector((state: RootState) => state.app)
 
     const {sendJsonMessage} = useWebSocket(
-            WS_URL,
-            {
-                queryParams: {token: access!},
-                shouldReconnect: () => true,
-                share: true
-            }
-        )
-
+        WS_URL,
+        {
+            queryParams: {token: access!},
+            shouldReconnect: () => true,
+            share: true
+        }
+    )
+    
     const idToDisplay = useMemo(() => {
         const map = new Map<number, string>()
         currentlySelected?.users?.forEach(user => {
@@ -73,7 +74,7 @@ function ChatLayout() {
                             <div className='displayname'>
                                 {idToDisplay.has(message.user_id) ? idToDisplay.get(message.user_id) : 'unknown user'}
                                 <div className='messagetime'>
-                                    {calcTimeFull(message.inserted_at) + ' ago'}
+                                    {calcTimeFull(message.inserted_at, currTime) + ' ago'}
                                 </div>
                             </div>
                             {message.content}

@@ -5,12 +5,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
 import useWebSocket, {ReadyState} from 'react-use-websocket'
 
-export const calcTime = (timestamp: number) => {
-    const now = Date.now()
+export const calcTime = (timestamp: number, now: number) => {
     const past = new Date(timestamp)
 
     const seconds = Math.floor((now - past.getTime()) / 1000)
-    if (seconds < 60) return `${seconds}s`
+    if (seconds < 60) return `<1m`
     const minutes = Math.floor(seconds / 60)
     if (minutes < 60) return `${minutes}m`
     const hours = Math.floor(minutes / 60)
@@ -21,13 +20,14 @@ export const calcTime = (timestamp: number) => {
     return `${weeks}w`
 }
 
-export const calcTimeFull = (timestamp: number) => {
-    const now = Date.now()
+export const calcTimeFull = (timestamp: number, now: number) => {
+    
     const past = new Date(timestamp)
 
     const seconds = Math.floor((now - past.getTime()) / 1000)
-    if (seconds < 60) return `${seconds} seconds`
+    if (seconds < 60) return `a few moments`
     const minutes = Math.floor(seconds / 60)
+    if (minutes < 2) return `${minutes} minute`
     if (minutes < 60) return `${minutes} minutes`
     const hours = Math.floor(minutes / 60)
     if (hours < 24) return `${hours} hours`
@@ -52,6 +52,7 @@ function ChatList() {
     const inputRef = useRef<HTMLInputElement>(null)
     const amountOfChats = useRef(chats.length)
     const WS_URL = 'ws://localhost:4001/socket/websocket'
+    const {currTime} = useSelector((state: RootState) => state.app)
 
     const {sendJsonMessage, lastJsonMessage, readyState} = useWebSocket(
         WS_URL,
@@ -179,7 +180,7 @@ function ChatList() {
                     <div className='chatname'>
                         {chat.chat_name}
                     </div> 
-                    {calcTime(chat.last_msg_time)} 
+                    {calcTime(chat.last_msg_time, currTime)} 
                 </button>
             })}
         </div>

@@ -8,10 +8,10 @@ import { useDispatch } from 'react-redux';
 import { loadSessionAsync, renewAccessAsync } from './store/userSlice';
 import { AppDispatch } from './store/store';
 import { useEffect } from 'react';
-
+import { updateCurrTime } from './store/appSlice';
 
 function App() {
- 
+  
   const dispatch = useDispatch<AppDispatch>()
   
   useEffect(() => {
@@ -20,6 +20,14 @@ function App() {
       const token = await dispatch(renewAccessAsync())
       await detail.onFinish(token)
     })
+
+    let interval = setInterval(() => {
+      dispatch(updateCurrTime(Date.now()))
+    }, 30000)
+
+    return () => {
+      clearInterval(interval)
+    }
   }, [])
 
   return (
