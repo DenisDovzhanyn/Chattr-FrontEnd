@@ -1,6 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import { getChats, createChat, getChatMessages } from "../services/ChatService"
-import useWebSocket from "react-use-websocket"
 
 interface ChatState {
     chats: Chat[]
@@ -10,11 +9,12 @@ interface ChatState {
 }
 
 export interface Chat {
-    id: number,
+    id: number
     last_msg_time: number
     chat_name: string
     users?: User[]
     messages?: Message[]
+    key?: string
 
 }
 
@@ -66,6 +66,9 @@ export const chatSlice = createSlice( {
             }
 
             const chatIndex = state.chats.findIndex((chat) => chat.id == action.payload.message.chat_id)
+            // i could check to make sure if chat index != 0 before doing these bottom lines,
+            // but no matter what i will need to update a certain chats last-msg-time which would
+            // also require me to create a new chat and then a new chat list so pointless?
             const chat = {
                 ...state.chats[chatIndex],
                 last_msg_time: action.payload.message.inserted_at

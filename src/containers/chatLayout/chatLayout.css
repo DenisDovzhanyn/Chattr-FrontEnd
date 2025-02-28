@@ -32,7 +32,9 @@
     overflow-y: scroll;
     padding-left: 50px;
     height: 100%;
+    outline: none;
 }
+
 
 #chatbox {
     border: 1px solid #3b3939;

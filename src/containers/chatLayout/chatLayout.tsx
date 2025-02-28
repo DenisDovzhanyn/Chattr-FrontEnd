@@ -9,7 +9,8 @@ function ChatLayout() {
     const {userId, access} = useSelector((state: RootState) => state.user)
     const [newMessage, setNewMessage] = useState('')
     const WS_URL = 'ws://localhost:4001/socket/websocket'
-    const chatbox = useRef<HTMLDivElement>(null)
+    const messageContainer = useRef<HTMLDivElement>(null)
+    const messageInput = useRef<HTMLDivElement>(null)
     const {currTime} = useSelector((state: RootState) => state.app)
 
     const {sendJsonMessage} = useWebSocket(
@@ -26,6 +27,10 @@ function ChatLayout() {
         currentlySelected?.users?.forEach(user => {
             map.set(user.id, user.display_name)
         });
+        if (messageInput.current != null) {
+            messageInput.current.focus()
+            messageInput.current.click()
+        }
         return map
     }, [currentlySelected])
 
@@ -50,8 +55,8 @@ function ChatLayout() {
     }
 
     useEffect(() => {
-        if (chatbox != null && chatbox.current != null) {
-            chatbox.current.scrollTop = chatbox.current.scrollHeight
+        if (messageContainer != null && messageContainer.current != null) {
+            messageContainer.current.scrollTop = messageContainer.current.scrollHeight
         }
     }, [currentlySelected?.messages])
     if (currentlySelected === undefined) return <div> Please Select A Chat</div>
@@ -59,7 +64,7 @@ function ChatLayout() {
 
             <div id='chatlayout'>
                 <h2 id='chatname'>chat: {currentlySelected.chat_name}</h2>
-                <div id='messagecontainer' ref={chatbox}>
+                <div id='messagecontainer' ref={messageContainer}>
                     {currentlySelected.messages!.map((message, index) => {
                             // wow this is disgusting
                         if (index != 0 
@@ -83,7 +88,7 @@ function ChatLayout() {
                 </div>
 
                 <div id='chatbox'>
-                    <div id='chatboxcontent' contentEditable="plaintext-only" onKeyUp={onMessageSend} onKeyDown={(e) => {if(e.key === 'Enter' ) 
+                    <div id='chatboxcontent' ref={messageInput} contentEditable="plaintext-only" onKeyUp={onMessageSend} onKeyDown={(e) => {if(e.key === 'Enter' ) 
                         e.preventDefault()
                         return false
                     }}>
