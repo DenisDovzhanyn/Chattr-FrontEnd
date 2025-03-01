@@ -11,73 +11,7 @@
     padding-left: 10px;
 }
 
-#createchatmodal:open {
-    
-    background-color: #172c47;
-    top: 40%;
-    position: fixed;
-    bottom: 60%;
-    display: flex;
-    flex-direction: column;
-    width: 300px;
-    align-items: flex-end;
-    border-style: none;
-    border-radius: 3px;
-}
 
-
-
-#modalbackground {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100vw;
-    background-color: gray;
-    opacity: 0.5;
-}
-#createchatform {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-#modalexitbutton {
-    background-color: #172c47;
-    border-style: none;
-    width: 20px;
-    height: 20px;
-    padding: 0;
-}
-
-
-#modalbutton {
-    border-radius: 5px;
-    border-style: none;
-    background-color: #a1a1eb;
-    width: 100px;
-    height: 40px;
-    transition: background-color 1s;
-    margin-top: 20px;
-}
-
-#modalbutton:hover {
-    background-color: #d3d3ff;
-}
-
-#modalbutton:disabled {
-    background-color: #8a8a9b;
-}
-
-#createchatlabel {
-    display: flex;
-    flex-direction: column;
-    color: #dddddd;
-    width: 100%;
-}
-#chatnameinput {
-    width: 100%;
-}
 
 .chatlistbutton {
     height: 50px;

@@ -17,11 +17,36 @@
     width: 100%;
     justify-content: space-between;
 }
-#chatname {
+#chattop {
+    padding-top: 20px;
     padding-left: 50px;
+    padding-right: 50px;
     border-bottom: 1px solid white;
     margin-bottom: 0px;
     padding-bottom: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+#chatname {
+    margin: 0px;
+}
+
+#adduser {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    padding: 0px;
+}
+
+.addusersize {
+    width: 40px;
+    height: 40px;
+}
+
+#adduser:hover #addusersvg {
+    fill: white;
 }
 .messagetime {
     font-size: small;

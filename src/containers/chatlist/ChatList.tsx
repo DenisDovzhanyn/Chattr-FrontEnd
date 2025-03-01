@@ -4,6 +4,7 @@ import { createNewChatAsync, loadChatsAsync, selectChatAsync, addMessageToChat }
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../store/store'
 import useWebSocket, {ReadyState} from 'react-use-websocket'
+import Modal from '../modal/Modal'
 
 export const calcTime = (timestamp: number, now: number) => {
     const past = new Date(timestamp)
@@ -48,8 +49,6 @@ function ChatList() {
     const {access, userId} = useSelector((state: RootState) => state.user) 
     const dispatch = useDispatch<AppDispatch>()
     const [createChatModalOpen, setCreateChatModalOpen] = useState(false);
-    const [newChatName, setNewChatName] = useState('')
-    const inputRef = useRef<HTMLInputElement>(null)
     const amountOfChats = useRef(chats.length)
     const WS_URL = 'ws://localhost:4001/socket/websocket'
     const {currTime} = useSelector((state: RootState) => state.app)
@@ -121,17 +120,15 @@ function ChatList() {
         }
     }, [lastJsonMessage])
 
-    useEffect(() => {
-        if (createChatModalOpen && inputRef.current) {
-          inputRef.current.focus();
-          inputRef.current.select();
-        }
-      }, [createChatModalOpen]);
     
+    
+    const handleSubmit = (chatName: string) => {
+        dispatch(createNewChatAsync(chatName))
+    } 
     return ( 
         <div id="chatlist">
 
-            <div id='modalbackground' style={{display: createChatModalOpen ? 'block' : 'none'}} />
+            {/* <div id='modalbackground' style={{display: createChatModalOpen ? 'block' : 'none'}} />
             <dialog open={createChatModalOpen} id='createchatmodal'>
                 <button onClick={() => (setCreateChatModalOpen(false))} id='modalexitbutton'>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" id='exitsvg'>
@@ -162,7 +159,13 @@ function ChatList() {
                 </button>
 
 
-            </dialog>
+            </dialog> */}
+            <Modal openState={createChatModalOpen} 
+                setOpenState={setCreateChatModalOpen} 
+                inputLabel='Chat name' 
+                buttonLabel='create chat' 
+                handleSubmit={handleSubmit}
+            />
             
             <button id='createchat' className='chatlistbutton' onClick={() => {
                 setCreateChatModalOpen(true)
