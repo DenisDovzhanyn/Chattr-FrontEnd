@@ -22,7 +22,7 @@ export const fetchWithAuth = async (link: string, options: fetchWithAuthOptions)
         if (response.ok) {
             return jsonResponse
         }
-        
+        errMessage = jsonResponse.error
         if (response.status == 401) {
             window.dispatchEvent(new CustomEvent('renewAccess', {
                 detail: {

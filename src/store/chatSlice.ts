@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
-import { getChats, createChat, getChatMessages } from "../services/ChatService"
+import { getChats, createChat, getChatMessages, addUserToChat } from "../services/ChatService"
+import { RootState } from "./store"
 
 interface ChatState {
     chats: Chat[]
@@ -53,6 +54,14 @@ export const createNewChatAsync = createAsyncThunk(
     async (chat_name: string) => await createChat(chat_name)
 )
 
+export const addUserToChatAsync = createAsyncThunk(
+    "chats/addUserToChatAsync",
+
+    async (username: string, api) => {
+        const state = api.getState() as RootState
+        return await addUserToChat(username, state.chats.currentlySelected!.id!)
+    }
+)
 export const chatSlice = createSlice( {
     name: 'chats',
     initialState,
@@ -121,6 +130,21 @@ export const chatSlice = createSlice( {
             .addCase(selectChatAsync.rejected, (state, action) => {
                 state.error = action.error.message || ''
                 state.isLoading = false
+            })
+            .addCase(addUserToChatAsync.fulfilled, (state, action) => {
+                const response: Chat = action.payload.chat
+                const newChat = {...(state.chats.find(chat => chat.id == response.id) as Chat)} 
+                newChat.users = response.users
+                
+                state.chats = [newChat, ...state.chats.filter((chat) => chat.id != response.id)]
+
+            })
+            .addCase(addUserToChatAsync.rejected, (state, action) => {
+                state.error = action.error.message || ''
+                state.isLoading = false
+            })
+            .addCase(addUserToChatAsync.pending, (state) => {
+                state.isLoading = true
             })
     }
 })

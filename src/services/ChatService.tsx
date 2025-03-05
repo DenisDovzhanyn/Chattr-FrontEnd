@@ -42,7 +42,24 @@ export async function getChatMessages(chat_id: number) {
 }
 // chat_id and user_id needed
 // fuck
-export async function addUserToChat() {
+export async function addUserToChat(username: string, chat_id: number) {
+    let errMessage = 'Internal server error'
+
+    try {
+        const response = await fetchWithAuth(`${import.meta.env.VITE_BASE_API}/api/chats/add_user`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username: username, chat_id: chat_id})
+            }
+        )
+        return response
+    } catch (err) {
+        if (err instanceof Error) errMessage = err.message
+    }
+    throw new Error(errMessage)
 
 }
 

@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { calcTimeFull } from '../chatlist/ChatList'
 import useWebSocket, {ReadyState} from 'react-use-websocket'
 import Modal from '../modal/Modal'
+import { addUserToChatAsync } from '../../store/chatSlice'
 function ChatLayout() {
     const {currentlySelected} = useSelector((state: RootState) => state.chats)
     const {userId, access} = useSelector((state: RootState) => state.user)
@@ -12,8 +13,8 @@ function ChatLayout() {
     const [addFriendModalState, setAddFriendModalState] = useState(false)
     const WS_URL = 'ws://localhost:4001/socket/websocket'
     const messageContainer = useRef<HTMLDivElement>(null)
-    const messageInput = useRef<HTMLDivElement>(null)
     const {currTime} = useSelector((state: RootState) => state.app)
+    const dispatch = useDispatch<AppDispatch>()
 
     const {sendJsonMessage} = useWebSocket(
         WS_URL,
@@ -31,6 +32,10 @@ function ChatLayout() {
         });
         return map
     }, [currentlySelected])
+
+    const handleAddUserSubmit = (username: string) => {
+        dispatch(addUserToChatAsync(username))
+    }
 
     const onMessageSend = (e: any) => {
         if (e.key === 'Enter') {
@@ -65,7 +70,7 @@ function ChatLayout() {
                 setOpenState={setAddFriendModalState} 
                 inputLabel='Username' 
                 buttonLabel='Add User' 
-                handleSubmit={() => {console.log('pooping out poop')}}
+                handleSubmit={handleAddUserSubmit}
                 />
                 <div id='chattop'>
                     <h2 id='chatname'>
