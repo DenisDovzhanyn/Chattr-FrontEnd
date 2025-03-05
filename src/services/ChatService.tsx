@@ -40,6 +40,11 @@ export async function getChatMessages(chat_id: number) {
     throw new Error(errMessage)
 
 }
+// chat_id and user_id needed
+// fuck
+export async function addUserToChat() {
+
+}
 
 export async function createChat(chat_name: string) {
     let errMessage = 'Internal server error'
