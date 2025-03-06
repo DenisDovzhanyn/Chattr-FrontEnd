@@ -15,6 +15,7 @@ function ChatLayout() {
     const messageContainer = useRef<HTMLDivElement>(null)
     const {currTime} = useSelector((state: RootState) => state.app)
     const dispatch = useDispatch<AppDispatch>()
+    const chatBoxInput = useRef<HTMLDivElement | null>(null)
 
     const {sendJsonMessage} = useWebSocket(
         WS_URL,
@@ -30,6 +31,11 @@ function ChatLayout() {
         currentlySelected?.users?.forEach(user => {
             map.set(user.id, user.display_name)
         });
+
+        if (chatBoxInput.current) {
+             chatBoxInput.current.innerHTML = ''
+             setNewMessage('')
+        }
         return map
     }, [currentlySelected])
 
@@ -106,11 +112,13 @@ function ChatLayout() {
                 </div>
 
                 <div id='chatbox'>
-                    <div id='chatboxcontent' tabIndex= {-1} ref={(thing) => thing?.focus()} contentEditable="plaintext-only" onKeyUp={onMessageSend} onKeyDown={(e) => {if(e.key === 'Enter' ) 
+                    <div id='chatboxcontent' ref={thing => {
+                        thing?.focus()
+                        chatBoxInput.current = thing
+                    }} contentEditable="plaintext-only" onKeyUp={onMessageSend} onKeyDown={(e) => {if(e.key === 'Enter' ) 
                         e.preventDefault()
                         return false
                     }}>
-                        
                     </div>
                 </div>
             </div>
