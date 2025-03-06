@@ -137,6 +137,10 @@ export const chatSlice = createSlice( {
                 newChat.users = response.users
                 
                 state.chats = [newChat, ...state.chats.filter((chat) => chat.id != response.id)]
+                if (state.currentlySelected?.id == newChat.id) {
+                    newChat.messages = state.currentlySelected?.messages
+                    state.currentlySelected = newChat
+                }
 
             })
             .addCase(addUserToChatAsync.rejected, (state, action) => {
