@@ -45,7 +45,7 @@ interface Msg {
     topic: string
 }
 function ChatList() {
-    const {chats} = useSelector((state: RootState) => state.chats)
+    const {chats, currentlySelected} = useSelector((state: RootState) => state.chats)
     const {access, userId} = useSelector((state: RootState) => state.user) 
     const dispatch = useDispatch<AppDispatch>()
     const [createChatModalOpen, setCreateChatModalOpen] = useState(false);
@@ -179,7 +179,7 @@ function ChatList() {
                 Chats
             </div>
             {chats.map((chat) => {
-                return <button className='chat' key={chat.id} onClick={() => dispatch(selectChatAsync(chat.id))}>
+                return <button className='chat' key={chat.id} onClick={() => dispatch(selectChatAsync(chat.id))} style={{backgroundColor: currentlySelected?.id === chat.id ? '#182a43' : ''}}>
                     <div className='chatname'>
                         {chat.chat_name}
                     </div> 
