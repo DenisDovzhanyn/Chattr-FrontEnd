@@ -7,7 +7,7 @@ import useWebSocket, {ReadyState} from 'react-use-websocket'
 import Modal from '../modal/Modal'
 import { addUserToChatAsync } from '../../store/chatSlice'
 function ChatLayout() {
-    const {currentlySelected} = useSelector((state: RootState) => state.chats)
+    const {currentlySelected, error} = useSelector((state: RootState) => state.chats)
     const {userId, access} = useSelector((state: RootState) => state.user)
     const [newMessage, setNewMessage] = useState('')
     const [addFriendModalState, setAddFriendModalState] = useState(false)
@@ -77,6 +77,8 @@ function ChatLayout() {
                 inputLabel='Username' 
                 buttonLabel='Add User' 
                 handleSubmit={handleAddUserSubmit}
+                closeOnSubmit={false}
+                error={error}
                 />
                 <div id='chattop'>
                     <h2 id='chatname'>

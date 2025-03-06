@@ -149,6 +149,7 @@ export const chatSlice = createSlice( {
             })
             .addCase(addUserToChatAsync.pending, (state) => {
                 state.isLoading = true
+                state.error = ''
             })
     }
 })

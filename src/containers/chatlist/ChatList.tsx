@@ -165,6 +165,8 @@ function ChatList() {
                 inputLabel='Chat name' 
                 buttonLabel='create chat' 
                 handleSubmit={handleSubmit}
+                closeOnSubmit={true}
+                error=''
             />
             
             <button id='createchat' className='chatlistbutton' onClick={() => {
@@ -179,7 +181,8 @@ function ChatList() {
                 Chats
             </div>
             {chats.map((chat) => {
-                return <button className='chat' key={chat.id} onClick={() => dispatch(selectChatAsync(chat.id))} style={{backgroundColor: currentlySelected?.id === chat.id ? '#182a43' : ''}}>
+                return <button className='chat' key={chat.id} onClick={() => dispatch(selectChatAsync(chat.id))} 
+                style={{backgroundColor: currentlySelected?.id === chat.id ? '#182a43' : ''}}>
                     <div className='chatname'>
                         {chat.chat_name}
                     </div> 

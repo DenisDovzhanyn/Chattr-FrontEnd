@@ -1,3 +1,4 @@
+import { color } from 'motion/react'
 import './Modal.css'
 import { useState, useRef, useEffect } from 'react'
 
@@ -7,6 +8,8 @@ interface ModalProps {
     handleSubmit: CallableFunction,
     inputLabel: string,
     buttonLabel: string,
+    closeOnSubmit: boolean,
+    error: string
 }
 function Modal(props: ModalProps) {
     const [inputState, setInputState] = useState('')
@@ -42,13 +45,12 @@ function Modal(props: ModalProps) {
                         required
                     />
                 </label>
-
+                {props.error? <div style={ {backgroundColor: 'transparent', color: '#d35a5a', width: '100%'}}> {props.error}</div> : ''}
                 <button id='modalbutton' disabled = {inputState ? false : true} onClick={(event) => {
                     event.preventDefault()
                     props.handleSubmit(inputState)
-                    props.setOpenState(false)
+                    if (props.closeOnSubmit) props.setOpenState(false)
                     setInputState('')
-                    
                 }}>
                     {props.buttonLabel}
                 </button>
