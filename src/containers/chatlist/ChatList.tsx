@@ -33,6 +33,7 @@ export const calcTimeFull = (timestamp: number, now: number) => {
     const hours = Math.floor(minutes / 60)
     if (hours < 24) return `${hours} hours`
     const days = Math.floor(hours / 24)
+    if (days < 2) return `${days} day`
     if (days < 7) return `${days} days`
     const weeks = Math.floor(days / 7)
     return `${weeks} weeks`

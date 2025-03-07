@@ -43,6 +43,10 @@ function ChatLayout() {
         dispatch(addUserToChatAsync(username))
     }
 
+    useEffect(() => {
+        setAddFriendModalState(false)
+    }, [currentlySelected?.users])
+
     const onMessageSend = (e: any) => {
         if (e.key === 'Enter') {
             sendJsonMessage({
