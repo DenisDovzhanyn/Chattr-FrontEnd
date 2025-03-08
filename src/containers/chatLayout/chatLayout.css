@@ -56,6 +56,7 @@
 #messagecontainer {
     overflow-y: scroll;
     padding-left: 50px;
+    padding-bottom: 10px;
     height: 100%;
     outline: none;
 }
@@ -66,7 +67,7 @@
     max-height: 150px;
     overflow-y: auto;
     min-height: 35px;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
     margin-left: 50px;
     margin-right: 50px;
     border-radius: 3px;
