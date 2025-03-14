@@ -19,7 +19,7 @@ export interface Chat {
 
 }
 
-interface Message {
+export interface Message {
     id: number,
     content: string,
     chat_id: number,
