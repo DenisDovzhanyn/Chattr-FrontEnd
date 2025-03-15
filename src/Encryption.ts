@@ -24,7 +24,7 @@ async function createSession(): Promise<Session> {
     const sessionKey = await crypto.subtle.generateKey(
         {name: 'AES-GCM', length: 256 },
         true,
-        ['encrypt', 'decrypt']
+        ['encrypt', 'decrypt', 'deriveKey']
     )
 
     const sessionId = Math.floor(Date.now() * Math.random())
@@ -62,7 +62,7 @@ async function encryptMessage(message: string, messageKey: CryptoKey): Promise<{
     const iv = crypto.getRandomValues(new Uint8Array(12))
     const encoder = new TextEncoder()
     const content = encoder.encode(message)
-
+    
     const encryptedContent = await crypto.subtle.encrypt(
         {name: 'AES-GCM', iv: iv},
         messageKey,
@@ -83,11 +83,18 @@ async function decryptMessage(encryptedContent: ArrayBuffer, iv: Uint8Array, mes
     session.messageCounter = tempCounterState
 
     const decoder = new TextDecoder()
-    const decryptedContent = await crypto.subtle.decrypt(
+    let decryptedContent
+
+    try {
+        decryptedContent = await crypto.subtle.decrypt(
         {name: 'AES-GCM', iv: iv},
         derivedKey,
         encryptedContent
     )
+    } catch (err) {
+        console.log(err)
+        return 'Could not decrypt content'
+    }
 
     return decoder.decode(decryptedContent)
 }
