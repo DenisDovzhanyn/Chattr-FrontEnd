@@ -37,7 +37,28 @@ async function createSession(): Promise<Session> {
     }
 }
 
-async function encryptMessage(message: string, messageKey: CryptoKey) {
+async function deriveMessageKey(session: Session, salt: Uint8Array): Promise<CryptoKey> {
+    const messageKey = await crypto.subtle.deriveKey({
+            name: 'HKDF',
+            hash: 'SHA-256',
+            salt,
+            info: new Uint8Array([session.messageCounter]).buffer
+        },
+        session.sessionKey,
+        {
+            name: 'AES-GCM',
+            length: 256
+        },
+        true,
+        ['encrypt', 'decrypt']
+    )
+
+    session.messageCounter++
+
+    return messageKey
+}
+
+async function encryptMessage(message: string, messageKey: CryptoKey): Promise<{iv: Uint8Array, encryptedContent: ArrayBuffer}> {
     const iv = crypto.getRandomValues(new Uint8Array(12))
     const encoder = new TextEncoder()
     const content = encoder.encode(message)
@@ -52,4 +73,9 @@ async function encryptMessage(message: string, messageKey: CryptoKey) {
         iv,
         encryptedContent
     }
+}
+
+
+async function decryptMessage() {
+
 }
