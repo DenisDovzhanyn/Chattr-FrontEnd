@@ -76,6 +76,18 @@ async function encryptMessage(message: string, messageKey: CryptoKey): Promise<{
 }
 
 
-async function decryptMessage() {
+async function decryptMessage(encryptedContent: ArrayBuffer, iv: Uint8Array, messageCounter: number, session: Session, salt: Uint8Array): Promise<String> {
+    const tempCounterState = session.messageCounter
+    session.messageCounter = messageCounter
+    const derivedKey = await deriveMessageKey(session, salt)
+    session.messageCounter = tempCounterState
 
+    const decoder = new TextDecoder()
+    const decryptedContent = await crypto.subtle.decrypt(
+        {name: 'AES-GCM', iv: iv},
+        derivedKey,
+        encryptedContent
+    )
+
+    return decoder.decode(decryptedContent)
 }
